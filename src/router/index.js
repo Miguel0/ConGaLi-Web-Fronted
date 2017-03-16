@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueWebsocket from 'vue-websocket'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
+import LandingInnerPage from '@/components/LandingInnerPage'
 import ConwaysGamePlaceholder from '@/components/ConwaysGamePlaceholder'
 
 Vue.use(Router)
@@ -11,11 +11,11 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: Hello
+      name: 'landingPage',
+      component: LandingInnerPage
     },
     {
-      path: '/game',
+      path: '/game/:gameId',
       name: 'Game',
       component: ConwaysGamePlaceholder
     }
