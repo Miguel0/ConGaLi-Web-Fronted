@@ -6,23 +6,34 @@
           <div class='modal-container'>
 
             <div class='modal-header'>
-              <slot name='header'>
-                default header
-              </slot>
+              <h1>
+                <slot name='header'> Create Game</slot>
+              </h1>
             </div>
 
             <div class='modal-body'>
+              <div class="form-group" v-bind:class="{ 'form-group--error': $v.name.$error }">
+                <label class="form__label">Name</label>
+                <input class="form__input" v-model.trim="name" @input="$v.name.$touch()">
+              </div>
+              <span class="form-group__message" v-if="!$v.name.required">Field is required</span>
+              <span class="form-group__message" v-if="!$v.name.minLength">Name must have at least {{$v.name.$params.minLength.min}} letters.</span>
+
+              <div class="form-group" v-bind:class="{ 'form-group--error': $v.color.$error }">
+                <label class="form__label">User Color</label>
+                <compact-picker v-model="color" />
+              </div>
+              <span class="form-group__message" v-if="!$v.color.required">Field is required</span>
+              
+
               <slot name='body'>
-                default body
               </slot>
             </div>
 
             <div class='modal-footer'>
               <slot name='footer'>
-                default footer
-                <button class='modal-default-button' @click='$emit('close')'>
-                  OK
-                </button>
+                <button class='modal-default-button' @click='$emit("close")'>Cancel</button>
+                <button class='modal-default-button' @click='$emit("close")'>Create Game</button>
               </slot>
             </div>
           </div>
@@ -33,13 +44,53 @@
 </template>
 
 <script>
+import { required, minLength } from 'vuelidate/lib/validators'
+import { Compact } from 'vue-color'
+
 export default {
-  name: 'createGameModal',
+  name: 'create-game-modal',
+  components: {
+    'compact-picker': Compact
+  },
   methods: {
+    toggleCreateGameModal: function () {
+      this.$data.showCreateGameModal = !this.$data.showCreateGameModal
+    }
+  },
+  validations: {
+    name: {
+      required,
+      minLength: minLength(4)
+    },
+    color: {
+      required
+    }
   },
   data () {
     return {
-      showModal: false
+      name: '',
+      color: {
+        hex: '#194d33',
+        hsl: {
+          h: 150,
+          s: 0.5,
+          l: 0.2,
+          a: 1
+        },
+        hsv: {
+          h: 150,
+          s: 0.66,
+          v: 0.30,
+          a: 1
+        },
+        rgba: {
+          r: 25,
+          g: 77,
+          b: 51,
+          a: 1
+        },
+        a: 1
+      }
     }
   }
 }
@@ -47,67 +98,17 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
-.modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, .5);
-  display: table;
-  transition: opacity .3s ease;
+.form-group--error+.form-group__message {
+    display: block;
+    color: #f57f6c;
 }
-
-.modal-wrapper {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.modal-container {
-  width: 300px;
-  margin: 0px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-  transition: all .3s ease;
-  font-family: Helvetica, Arial, sans-serif;
-}
-
-.modal-header h3 {
-  margin-top: 0;
-  color: #42b983;
-}
-
-.modal-body {
-  margin: 20px 0;
-}
-
-.modal-default-button {
-  float: right;
-}
-
-/*
- * The following styles are auto-applied to elements with
- * transition='modal' when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
-
-.modal-enter {
-  opacity: 0;
-}
-
-.modal-leave-active {
-  opacity: 0;
-}
-
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
+_inputs.sass:174
+.form-group__message {
+    font-size: .75rem;
+    line-height: 1;
+    display: none;
+    margin-left: 14px;
+    margin-top: -1.6875rem;
+    margin-bottom: .9375rem;
 }
 </style>
