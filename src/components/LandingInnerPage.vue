@@ -17,9 +17,19 @@ export default {
     toggleCreateGameModal: function () {
       this.$data.showCreateGameModal = !this.$data.showCreateGameModal
     },
-    createGame: function (newGameData) {
-      console.log(JSON.stringify(newGameData))
+    createGame: function (newGameSubComponentData) {
       this.toggleCreateGameModal()
+      let newGameData = {
+        gameName: newGameSubComponentData.name,
+        userData: {
+          name: 'name',
+          color: newGameSubComponentData.color.hex.substr(1)
+        }
+      }
+
+      this.$socket.emit('createGame', newGameData)
+
+      console.log('data sent to server: ' + JSON.stringify(newGameData))
     }
   },
   data () {
