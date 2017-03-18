@@ -1,7 +1,7 @@
 <template>
   <div class='landingInnerPage'>
     <button @click='toggleCreateGameModal'>Create Game</button>
-    <create-game-modal v-if='showCreateGameModal' @close='createGame' :show.sync='newGameData' />
+    <create-game-modal v-if='showCreateGameModal' v-on:createGame='createGame' />
   </div>
 </template>
 
@@ -9,22 +9,16 @@
 import CreateGameModal from './CreateGameModal.vue'
 
 export default {
-  name: 'landingInnerPage',
+  name: 'landing-inner-page',
   components: {
     CreateGameModal
-  },
-  props: {
-    newGameData: {
-      type: Object,
-      required: true,
-      twoWay: true
-    }
   },
   methods: {
     toggleCreateGameModal: function () {
       this.$data.showCreateGameModal = !this.$data.showCreateGameModal
     },
-    createGame: function () {
+    createGame: function (newGameData) {
+      console.log(JSON.stringify(newGameData))
       this.toggleCreateGameModal()
     }
   },

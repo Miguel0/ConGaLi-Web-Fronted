@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'conwaysGamePlaceholder',
+  name: 'conways-game-placeholder',
   methods: {
     initializeCanvas (elementId) {
       let canvas = document.getElementById(elementId)

@@ -21,7 +21,7 @@
 
               <div class="form-group" v-bind:class="{ 'form-group--error': $v.color.$error }">
                 <label class="form__label">User Color</label>
-                <compact-picker v-model="color" />
+                <color-picker v-model="color" />
               </div>
               <span class="form-group__message" v-if="!$v.color.required">Field is required</span>
               
@@ -32,8 +32,8 @@
 
             <div class='modal-footer'>
               <slot name='footer'>
-                <button class='modal-default-button' @click='$emit("close")'>Cancel</button>
-                <button class='modal-default-button' @click='$emit("close")'>Create Game</button>
+                <button class='modal-default-button' @click.prevent='$emit("close")'>Cancel</button>
+                <button class='modal-default-button' @click.prevent='propagateNewGameInitialData'>Create Game</button>
               </slot>
             </div>
           </div>
@@ -50,11 +50,11 @@ import { Compact } from 'vue-color'
 export default {
   name: 'create-game-modal',
   components: {
-    'compact-picker': Compact
+    'color-picker': Compact
   },
   methods: {
-    toggleCreateGameModal: function () {
-      this.$data.showCreateGameModal = !this.$data.showCreateGameModal
+    propagateNewGameInitialData: function () {
+      this.$emit('createGame', this.$data)
     }
   },
   validations: {
