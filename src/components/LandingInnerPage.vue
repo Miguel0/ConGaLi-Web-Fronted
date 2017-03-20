@@ -27,9 +27,26 @@ export default {
         }
       }
 
-      this.$socket.emit('createGame', newGameData)
+      this.$socket.emit('createGame', newGameData, this.gameAvailable)
 
       console.log('data sent to server: ' + JSON.stringify(newGameData))
+    },
+    gameAvailable (gameId) {
+      console.log('Game creation confirmed with id: ' + gameId)
+
+      this.$router.push('/game/' + gameId)
+    }
+  },
+  socket: {
+    events: {
+      error (err) {
+        console.error('Websocket error!', err)
+      },
+      gameCreation (gameId) {
+        console.log('Game creation confirmed with id: ' + gameId)
+
+        this.$router.push('/game/' + gameId)
+      }
     }
   },
   data () {
