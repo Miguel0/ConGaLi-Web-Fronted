@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import CreateGameModal from './CreateGameModal.vue'
+import CreateGameModal from './modal/CreateGameModal.vue'
 
 export default {
   name: 'landing-inner-page',
@@ -27,14 +27,9 @@ export default {
         }
       }
 
-      this.$socket.emit('createGame', newGameData, this.gameAvailable)
+      this.$socket.emit('createGame', newGameData)
 
       console.log('data sent to server: ' + JSON.stringify(newGameData))
-    },
-    gameAvailable (gameId) {
-      console.log('Game creation confirmed with id: ' + gameId)
-
-      this.$router.push('/game/' + gameId)
     }
   },
   socket: {
@@ -42,7 +37,7 @@ export default {
       error (err) {
         console.error('Websocket error!', err)
       },
-      gameCreation (gameId) {
+      gameCreated (gameId) {
         console.log('Game creation confirmed with id: ' + gameId)
 
         this.$router.push('/game/' + gameId)
