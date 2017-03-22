@@ -22,7 +22,8 @@ export default {
 
       let canvasData = {
         canvas: canvas,
-        cells: []
+        context: canvas.getContext('2d'),
+        cells: {}
       }
 
       // initializating position variables
@@ -44,6 +45,7 @@ export default {
       return this.$route.params.gameId
     },
     getUserLocalColor () {
+      console.log(`user.room.${this.getGameId()}.color`)
       return localStorage[`user.room.${this.getGameId()}.color`]
     },
     getCanvasData (canvasId) {
@@ -52,11 +54,9 @@ export default {
     drawCell (cellDefinition, canvas, context, dontApplyStroke) {
       let calculatedContext = context || canvas.getContext('2d')
 
-      if (!context) {
-        calculatedContext.strokeStyle = 'black'
-        calculatedContext.fillStyle = cellDefinition.getUserColor.apply()
-        calculatedContext.lineWidth = 0.5
-      }
+      calculatedContext.fillStyle = cellDefinition.getUserColor.apply()
+      calculatedContext.strokeStyle = 'black'
+      calculatedContext.lineWidth = 0.5
 
       // Draw a square using the fillRect() method and fill it with the colour specified by the fillStyle attribute
       calculatedContext.fillRect(Math.floor(10 * (cellDefinition.x - 1)), Math.floor(10 * (cellDefinition.y - 1)), 10, 10)
@@ -66,7 +66,9 @@ export default {
       }
     },
     drawBoard (data) {
-      let context = data.canvas.getContext('2d')
+      let context = data.context
+      context.clearRect(0, 0, data.canvas.width, data.canvas.height)
+      context.beginPath()
 
       for (let x = 1; x <= (data.canvas.height / 20); x++) {
         for (let y = 1; y <= (data.canvas.width / 20); y++) {
@@ -78,16 +80,14 @@ export default {
 
       let cells = data.cells
 
-      if (cells.length > 0) {
-        let xKeys = Object.keys(cells)
+      let xKeys = Object.keys(cells)
 
-        console.log(xKeys)
-        for (let x = 0; x < xKeys.length; x++) {
-          let yKeys = Object.keys(cells[x])
+      for (let x = 0; x < xKeys.length; x++) {
+        let yKeys = Object.keys(cells[x])
+        console.log(yKeys)
 
-          for (let y = 0; y < yKeys.length; y++) {
-            this.drawCell(cells[x][y], data.canvas, context)
-          }
+        for (let y = 0; y < yKeys.length; y++) {
+          this.drawCell(cells[x][y], data.canvas, context)
         }
       }
 
@@ -144,7 +144,7 @@ export default {
       console.log('click on position ' + JSON.stringify(position))
 
       if (!canvasData.cells[position.x]) {
-        canvasData.cells[position.x] = []
+        canvasData.cells[position.x] = {}
       }
 
       canvasData.cells[position.x][position.y] = {x: position.x, y: position.y, getUserColor: this.getUserLocalColor}
@@ -173,7 +173,7 @@ export default {
 
     this.initializeCanvas('boardCanvas')
 
-    setTimeout(
+    setInterval(
       function () {
         let data = self.getCanvasData('boardCanvas')
         if (data) {
