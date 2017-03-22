@@ -21,6 +21,7 @@ export default {
       this.toggleCreateGameModal()
       let newGameData = {
         gameName: newGameSubComponentData.name,
+        refreshInterval: newGameSubComponentData.refreshInterval,
         userData: {
           name: 'name',
           color: newGameSubComponentData.color.hex.substr(1)
@@ -30,6 +31,21 @@ export default {
       this.$socket.emit('createGame', newGameData)
 
       console.log('data sent to server: ' + JSON.stringify(newGameData))
+    },
+    saveDataIntoLocalStorage: function (data) {
+      /* TODO check this: if (!supportsLocalStorage()) */
+
+      if (!localStorage['user.name']) {
+        localStorage['user.name'] = data.userData.name
+      }
+
+      if (!localStorage[`user.room.${data.gameName}`]) {
+        localStorage[`user.room.${data.gameName}`] = data.gameName
+      }
+
+      localStorage[`user.room.${data.gameName}.color`] = '#' + data.userData.color
+
+      localStorage[`user.room.${data.gameName}.refreshInterval`] = data.refreshInterval
     }
   },
   socket: {
@@ -37,10 +53,14 @@ export default {
       error (err) {
         console.error('Websocket error!', err)
       },
-      gameCreated (gameId) {
-        console.log('Game creation confirmed with id: ' + gameId)
+      gameCreated (data) {
+        console.log('Game creation confirmed with id: ' + data.gameName)
 
-        this.$router.push('/game/' + gameId)
+        console.log('Saving data into localStorage...')
+        this.saveDataIntoLocalStorage(data)
+
+        console.log('Redirecting to game page')
+        this.$router.push('/game/' + data.gameName)
       }
     }
   },

@@ -1,6 +1,6 @@
 <template>
   <generic-modal>
-    <slot name='header'> Create Game</slot>
+    <slot name='header'>Create Game</slot>
 
     <slot name='body'>
 
@@ -10,10 +10,16 @@
       </div>
       <span class="form-group__message" v-if="!$v.name.required">Field is required</span>
       <span class="form-group__message" v-if="!$v.name.minLength">Name must have at least {{$v.name.$params.minLength.min}} letters.</span>
+      
+      <div class="form-group" v-bind:class="{ 'form-group--error': $v.refreshInterval.$error }">
+        <label class="form__label">Refresh Interval (in milliseconds)</label>
+        <input class="form__input" v-model="refreshInterval" @input="$v.refreshInterval.$touch()">
+      </div>
+      <span class="form-group__message" v-if="!$v.refreshInterval.between">Must be between {{$v.refreshInterval.$params.between.min}} and {{$v.refreshInterval.$params.between.max}}</span>
 
       <div class="form-group" v-bind:class="{ 'form-group--error': $v.color.$error }">
         <label class="form__label">User Color</label>
-        <color-picker v-model="color" />
+        <color-picker v-model="color" @change-color="onChangeColor"/>
       </div>
       <span class="form-group__message" v-if="!$v.color.required">Field is required</span>
 
@@ -29,7 +35,7 @@
 </template>
 
 <script>
-import { required, minLength } from 'vuelidate/lib/validators'
+import { required, minLength, between } from 'vuelidate/lib/validators'
 import { Compact } from 'vue-color'
 
 export default {
@@ -38,14 +44,20 @@ export default {
     'color-picker': Compact
   },
   methods: {
-    propagateNewGameInitialData: function () {
+    propagateNewGameInitialData () {
       this.$emit('createGame', this.$data)
+    },
+    onChangeColor (colorSelected) {
+      this.$data.color = colorSelected
     }
   },
   validations: {
     name: {
       required,
       minLength: minLength(4)
+    },
+    refreshInterval: {
+      between: between(500, 10000)
     },
     color: {
       required
@@ -54,6 +66,7 @@ export default {
   data () {
     return {
       name: '',
+      refreshInterval: null,
       color: {
         hex: '#194d33',
         hsl: {
