@@ -19,36 +19,74 @@ export default {
       let canvas = document.getElementById(elementId)
       canvas.height = 3200
       canvas.width = 3200
-      this.drawBoard(canvas)
 
-      this.$data.canvasDataObject[elementId] = {canvas: canvas}
+      let canvasData = {
+        canvas: canvas,
+        cells: []
+      }
+
+      // initializating position variables
+      let computedStyle = document.defaultView.getComputedStyle(canvas, null)
+
+      canvasData.stylePaddingLeft = parseInt(computedStyle['paddingLeft'], 10) || 0
+      canvasData.stylePaddingTop = parseInt(computedStyle['paddingTop'], 10) || 0
+      canvasData.styleBorderLeft = parseInt(computedStyle['borderLeftWidth'], 10) || 0
+      canvasData.styleBorderTop = parseInt(computedStyle['borderTopWidth'], 10) || 0
+      // Some pages have fixed-position bars (like the stumbleupon bar) at the top or left of the page
+      // They will mess up mouse coordinates and this fixes that
+      let html = document.body.parentNode
+      canvasData.htmlTop = html.offsetTop
+      canvasData.htmlLeft = html.offsetLeft
+
+      this.$data.canvasDataObject[elementId] = canvasData
     },
     getGameId () {
       return this.$route.params.gameId
     },
-    drawCell (position, canvas, context, dontApplyStroke) {
+    getUserLocalColor () {
+      return localStorage[`user.room.${this.getGameId()}.color`]
+    },
+    getCanvasData (canvasId) {
+      return this.$data.canvasDataObject[canvasId]
+    },
+    drawCell (cellDefinition, canvas, context, dontApplyStroke) {
       let calculatedContext = context || canvas.getContext('2d')
 
       if (!context) {
         calculatedContext.strokeStyle = 'black'
-        calculatedContext.fillStyle = localStorage[`user.room.${this.getGameId()}.color`]
+        calculatedContext.fillStyle = cellDefinition.getUserColor.apply()
         calculatedContext.lineWidth = 0.5
       }
 
       // Draw a square using the fillRect() method and fill it with the colour specified by the fillStyle attribute
-      calculatedContext.fillRect(Math.floor(10 * (position.x - 1)), Math.floor(10 * (position.y - 1)), 10, 10)
+      calculatedContext.fillRect(Math.floor(10 * (cellDefinition.x - 1)), Math.floor(10 * (cellDefinition.y - 1)), 10, 10)
 
       if (!dontApplyStroke) {
         calculatedContext.stroke()
       }
     },
-    drawBoard (canvas) {
-      let context = canvas.getContext('2d')
+    drawBoard (data) {
+      let context = data.canvas.getContext('2d')
 
-      for (let x = 1; x <= (canvas.height / 20); x++) {
-        for (let y = 1; y <= (canvas.width / 20); y++) {
+      for (let x = 1; x <= (data.canvas.height / 20); x++) {
+        for (let y = 1; y <= (data.canvas.width / 20); y++) {
           if ((x + y) % 2 !== 0) {
-            this.drawCell({x: x, y: y}, canvas, context, false)
+            this.drawCell({x: x, y: y, getUserColor: () => { return '#000000' }}, data.canvas, context, true)
+          }
+        }
+      }
+
+      let cells = data.cells
+
+      if (cells.length > 0) {
+        let xKeys = Object.keys(cells)
+
+        console.log(xKeys)
+        for (let x = 0; x < xKeys.length; x++) {
+          let yKeys = Object.keys(cells[x])
+
+          for (let y = 0; y < yKeys.length; y++) {
+            this.drawCell(cells[x][y], data.canvas, context)
           }
         }
       }
@@ -88,22 +126,6 @@ export default {
       // We return a simple javascript object with x and y defined
       return {x: mx, y: my}
     },
-    initializePositionVariables (canvasId) {
-      let canvasData = this.$data.canvasDataObject[canvasId]
-      let canvas = canvasData.canvas
-
-      let computedStyle = document.defaultView.getComputedStyle(canvas, null)
-
-      canvasData.stylePaddingLeft = parseInt(computedStyle['paddingLeft'], 10) || 0
-      canvasData.stylePaddingTop = parseInt(computedStyle['paddingTop'], 10) || 0
-      canvasData.styleBorderLeft = parseInt(computedStyle['borderLeftWidth'], 10) || 0
-      canvasData.styleBorderTop = parseInt(computedStyle['borderTopWidth'], 10) || 0
-      // Some pages have fixed-position bars (like the stumbleupon bar) at the top or left of the page
-      // They will mess up mouse coordinates and this fixes that
-      let html = document.body.parentNode
-      canvasData.htmlTop = html.offsetTop
-      canvasData.htmlLeft = html.offsetLeft
-    },
     startGame () {
       if (!this.$socket.option) {
         // Initialize the queryString to play with a particular room always
@@ -117,11 +139,15 @@ export default {
     killGame () {
     },
     addCell (event) {
-      let canvasData = this.$data.canvasDataObject['boardCanvas']
+      let canvasData = this.getCanvasData('boardCanvas')
       let position = this.getMouse(event, canvasData)
       console.log('click on position ' + JSON.stringify(position))
 
-      this.drawCell(position, canvasData.canvas)
+      if (!canvasData.cells[position.x]) {
+        canvasData.cells[position.x] = []
+      }
+
+      canvasData.cells[position.x][position.y] = {x: position.x, y: position.y, getUserColor: this.getUserLocalColor}
     }
   },
   socket: {
@@ -143,8 +169,19 @@ export default {
     }
   },
   mounted () {
+    let self = this
+
     this.initializeCanvas('boardCanvas')
-    this.initializePositionVariables('boardCanvas')
+
+    setTimeout(
+      function () {
+        let data = self.getCanvasData('boardCanvas')
+        if (data) {
+          self.drawBoard(data)
+        }
+      },
+      100
+    )
   }
 }
 </script>
