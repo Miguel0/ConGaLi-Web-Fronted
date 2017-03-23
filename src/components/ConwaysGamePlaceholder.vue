@@ -62,10 +62,19 @@ export default {
       calculatedContext.fillRect(cellDefinition.gridPosition.x, cellDefinition.gridPosition.y, 10, 10)
     },
     drawBoard (data) {
-      let cells = data.cells
-      for (let x in cells) {
-        for (let y in cells[x]) {
-          this.drawCell(cells[x][y], data.canvas)
+      let canvasData = this.getCanvasData('boardCanvas')
+      let context = canvasData.canvas.getContext('2d')
+      canvasData.cells = data.boards[0].cells
+
+      context.clearRect(0, 0, canvasData.canvas.width, canvasData.canvas.height)
+
+      for (let x in canvasData.cells) {
+        for (let y in canvasData.cells[x]) {
+          let color = canvasData.cells[x][y].color
+
+          canvasData.cells[x][y].getUserColor = () => color
+
+          this.drawCell(canvasData.cells[x][y], canvasData.canvas, context)
         }
       }
     },
@@ -134,6 +143,8 @@ export default {
       canvasData.cells[gridPosition.x][gridPosition.y] = cellData
 
       this.drawCell(cellData, canvasData.canvas)
+
+      this.$socket.emit('createCell', gridPosition)
     }
   },
   socket: {
@@ -146,6 +157,10 @@ export default {
       },
       error (err) {
         console.error('Websocket error!', err)
+      },
+      refreshBoard (data) {
+        console.error('Refreshing board with data: ' + JSON.stringify(data))
+        this.drawBoard(data)
       }
     }
   },
