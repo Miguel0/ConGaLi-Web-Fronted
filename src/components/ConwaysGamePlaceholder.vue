@@ -5,7 +5,7 @@
       <button class='toolbar-button' @click='pauseGame'>Pause Game</button>
       <button class='toolbar-button' @click='killGame'>Kill Game</button>
     </div>
-    <canvas id='boardCanvas' @click.left='addCell'></canvas>
+    <canvas id='boardCanvas' @click.left.prevent='addCell'></canvas>
     <div class='cellsTemplateBar'>
     </div>
   </div>
@@ -22,7 +22,6 @@ export default {
 
       let canvasData = {
         canvas: canvas,
-        context: canvas.getContext('2d'),
         cells: {}
       }
 
@@ -33,6 +32,7 @@ export default {
       canvasData.stylePaddingTop = parseInt(computedStyle['paddingTop'], 10) || 0
       canvasData.styleBorderLeft = parseInt(computedStyle['borderLeftWidth'], 10) || 0
       canvasData.styleBorderTop = parseInt(computedStyle['borderTopWidth'], 10) || 0
+
       // Some pages have fixed-position bars (like the stumbleupon bar) at the top or left of the page
       // They will mess up mouse coordinates and this fixes that
       let html = document.body.parentNode
@@ -45,53 +45,29 @@ export default {
       return this.$route.params.gameId
     },
     getUserLocalColor () {
-      console.log(`user.room.${this.getGameId()}.color`)
       return localStorage[`user.room.${this.getGameId()}.color`]
     },
     getCanvasData (canvasId) {
       return this.$data.canvasDataObject[canvasId]
     },
-    drawCell (cellDefinition, canvas, context, dontApplyStroke) {
+    undrawCell (cellDefinition, canvas, context) {
+      context.clearRect(cellDefinition.gridPosition.x, cellDefinition.gridPosition.y, 10, 10)
+    },
+    drawCell (cellDefinition, canvas, context) {
       let calculatedContext = context || canvas.getContext('2d')
 
       calculatedContext.fillStyle = cellDefinition.getUserColor.apply()
-      calculatedContext.strokeStyle = 'black'
-      calculatedContext.lineWidth = 0.5
+      calculatedContext.strokeStyle = calculatedContext.fillStyle
 
-      // Draw a square using the fillRect() method and fill it with the colour specified by the fillStyle attribute
-      calculatedContext.fillRect(Math.floor(10 * (cellDefinition.x - 1)), Math.floor(10 * (cellDefinition.y - 1)), 10, 10)
-
-      if (!dontApplyStroke) {
-        calculatedContext.stroke()
-      }
+      calculatedContext.fillRect(cellDefinition.gridPosition.x, cellDefinition.gridPosition.y, 10, 10)
     },
     drawBoard (data) {
-      let context = data.context
-      context.clearRect(0, 0, data.canvas.width, data.canvas.height)
-      context.beginPath()
-
-      for (let x = 1; x <= (data.canvas.height / 20); x++) {
-        for (let y = 1; y <= (data.canvas.width / 20); y++) {
-          if ((x + y) % 2 !== 0) {
-            this.drawCell({x: x, y: y, getUserColor: () => { return '#000000' }}, data.canvas, context, true)
-          }
-        }
-      }
-
       let cells = data.cells
-
-      let xKeys = Object.keys(cells)
-
-      for (let x = 0; x < xKeys.length; x++) {
-        let yKeys = Object.keys(cells[x])
-        console.log(yKeys)
-
-        for (let y = 0; y < yKeys.length; y++) {
-          this.drawCell(cells[x][y], data.canvas, context)
+      for (let x in cells) {
+        for (let y in cells[x]) {
+          this.drawCell(cells[x][y], data.canvas)
         }
       }
-
-      context.stroke()
     },
     /* Creates an object with x and y defined,
      * set to the mouse position relative to the state's canvas
@@ -141,13 +117,23 @@ export default {
     addCell (event) {
       let canvasData = this.getCanvasData('boardCanvas')
       let position = this.getMouse(event, canvasData)
-      console.log('click on position ' + JSON.stringify(position))
 
-      if (!canvasData.cells[position.x]) {
-        canvasData.cells[position.x] = {}
+      let gridPosition = {x: Math.round((position.x - 5) / 10) * 10, y: Math.round((position.y - 5) / 10) * 10}
+
+      if (!canvasData.cells[gridPosition.x]) {
+        canvasData.cells[gridPosition.x] = {}
       }
 
-      canvasData.cells[position.x][position.y] = {x: position.x, y: position.y, getUserColor: this.getUserLocalColor}
+      let cellData = {
+        eventPosition: position,
+        gridPosition: gridPosition,
+        getUserColor: this.getUserLocalColor
+      }
+
+      console.log('new Cell created: ' + JSON.stringify(cellData))
+      canvasData.cells[gridPosition.x][gridPosition.y] = cellData
+
+      this.drawCell(cellData, canvasData.canvas)
     }
   },
   socket: {
@@ -169,19 +155,7 @@ export default {
     }
   },
   mounted () {
-    let self = this
-
     this.initializeCanvas('boardCanvas')
-
-    setInterval(
-      function () {
-        let data = self.getCanvasData('boardCanvas')
-        if (data) {
-          self.drawBoard(data)
-        }
-      },
-      100
-    )
   }
 }
 </script>
