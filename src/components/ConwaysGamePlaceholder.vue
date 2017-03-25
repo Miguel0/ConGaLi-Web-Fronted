@@ -64,7 +64,7 @@ export default {
     drawBoard (data) {
       let canvasData = this.getCanvasData('boardCanvas')
       let context = canvasData.canvas.getContext('2d')
-      canvasData.cells = data.boards[0].cells
+      canvasData.cells = data.cellsGrids[0].cells
 
       context.clearRect(0, 0, canvasData.canvas.width, canvasData.canvas.height)
 
@@ -112,12 +112,13 @@ export default {
       return {x: mx, y: my}
     },
     startGame () {
-      if (!this.$socket.option) {
+      if (this.$socket.option) {
         // Initialize the queryString to play with a particular room always
-        this.$socket.option = { query: `gameId=${this.getGameId()}` }
+        // this.$socket.option.query+= `,gameId=${this.getGameId()}`
+        console.log(JSON.stringify(this.$socket.option.query))
       }
 
-      this.$socket.emit('startGame', {boardId: 0})
+      this.$socket.emit('startGame', {cellsGridId: 0})
     },
     pauseGame () {
     },
@@ -133,18 +134,20 @@ export default {
         canvasData.cells[gridPosition.x] = {}
       }
 
-      let cellData = {
-        eventPosition: position,
-        gridPosition: gridPosition,
-        getUserColor: this.getUserLocalColor
+      if (!canvasData.cells[gridPosition.x][gridPosition.y]) {
+        let cellData = {
+          eventPosition: position,
+          gridPosition: gridPosition,
+          getUserColor: this.getUserLocalColor
+        }
+
+        console.log('new Cell created: ' + JSON.stringify(cellData))
+        canvasData.cells[gridPosition.x][gridPosition.y] = cellData
+
+        this.drawCell(cellData, canvasData.canvas)
+
+        this.$socket.emit('createCell', gridPosition)
       }
-
-      console.log('new Cell created: ' + JSON.stringify(cellData))
-      canvasData.cells[gridPosition.x][gridPosition.y] = cellData
-
-      this.drawCell(cellData, canvasData.canvas)
-
-      this.$socket.emit('createCell', gridPosition)
     }
   },
   socket: {
@@ -158,7 +161,7 @@ export default {
       error (err) {
         console.error('Websocket error!', err)
       },
-      refreshBoard (data) {
+      refreshCellsGrid (data) {
         console.error('Refreshing board with data: ' + JSON.stringify(data))
         this.drawBoard(data)
       }
