@@ -1,0 +1,70 @@
+<template>
+  <div class='cells-template-bar'>
+    <ul class='group-selection-bar'>
+      <template v-for="(cellsTemplateGroup, key, index) in tabsDef">
+        <li class='toolbar-button' @click='selectTab(key)'>{{cellsTemplateGroup.title}}</li>
+      </template>
+    </ul>
+    <div class='groups-template-bar'>
+      <template v-for="(cellsTemplateGroup, key, index) in tabsDef">
+        <div class='group-template-container' v-show='current === cellsTemplateGroup'>
+          <template v-for="(cellTemplate, key, index) in cellsTemplateGroup.cellsTemplates">
+            <div class='template-container'>
+              <img :src="cellTemplate.imgSrc" />
+              <p>{{cellTemplate.name}}</p>
+            </div>
+          </template>
+        </div>
+      </template>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'cells-template-bar',
+  methods: {
+    selectTab (key) {
+      let tab = this.$data.tabsDef[key || 0]
+      if (tab && tab !== this.$data.current) {
+        this.$data.current = tab
+      }
+    }
+  },
+  socket: {
+    events: {
+      setTemplateCellsOptions (data) {
+        console.error('Refreshing templateCellsOptions with data: ' + JSON.stringify(data))
+        this.$data.tabsDef = data
+        this.selectTab()
+      }
+    }
+  },
+  data () {
+    return {
+      tabsDef: [],
+      current: null
+    }
+  },
+  mounted () {
+    this.selectTab()
+  }
+}
+</script>
+
+<!-- Add 'scoped' attribute to limit CSS to this component only -->
+<style scoped>
+.group-template-container {
+  display: inline-flex;
+}
+
+.group-template-container div {
+  margin-right: 0.1em;
+  margin-left: 0.1em;
+}
+
+.template-container p {
+  line-height: 0.01em;
+  font-size: .75rem;
+}
+</style>

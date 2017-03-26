@@ -5,15 +5,19 @@
       <button class='toolbar-button' @click='pauseGame'>Pause Game</button>
       <button class='toolbar-button' @click='killGame'>Kill Game</button>
     </div>
+    <cells-template-bar />
     <canvas id='boardCanvas' @click.left.prevent='addCell'></canvas>
-    <div class='cellsTemplateBar'>
-    </div>
   </div>
 </template>
 
 <script>
+import CellsTemplateBar from './CellsTemplateBar.vue'
+
 export default {
   name: 'conways-game-placeholder',
+  components: {
+    CellsTemplateBar
+  },
   methods: {
     initializeCanvas (elementId) {
       let canvas = document.getElementById(elementId)
@@ -182,8 +186,7 @@ export default {
 <style scoped>
 
 #boardCanvas {
-  /*width: 800;
-  height: 800;*/
+  border: 1px solid black;
 }
 
 .conwaysGamePlaceholder {
