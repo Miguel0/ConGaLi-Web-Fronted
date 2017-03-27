@@ -1,5 +1,8 @@
 # Conway's Web Game Frontend
 
+
+This implementation is ment to be used with [Conway's Game Backend](https://github.com/Miguel0/conwaysGame-Backend).
+
 [Conway’s Game of Life](https://en.wikipedia.org/wiki/Conway's_Game_of_Life) is a famous simulation that demonstrates cellular automaton. It is modeled as a grid with 4 simple rules:
 
 1. **Any live cell with fewer than two live neighbours dies, as if caused by under-population.**
