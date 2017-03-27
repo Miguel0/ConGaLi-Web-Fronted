@@ -17,6 +17,12 @@
       </div>
       <span class="form-group__message" v-if="!$v.refreshInterval.between">Must be between {{$v.refreshInterval.$params.between.min}} and {{$v.refreshInterval.$params.between.max}}</span>
 
+      <div class="form-group" v-bind:class="{ 'form-group--error': $v.resolution.$error }">
+        <label class="form__label">Grid resolution (in pixels)</label>
+        <input class="form__input" v-model="resolution" @input="$v.resolution.$touch()">
+      </div>
+      <span class="form-group__message" v-if="!$v.resolution.between">Must be between {{$v.resolution.$params.between.min}} and {{$v.resolution.$params.between.max}}</span>
+
       <div class="form-group" v-bind:class="{ 'form-group--error': $v.color.$error }">
         <label class="form__label">User Color</label>
         <color-picker v-model="color" @change-color="onChangeColor"/>
@@ -59,6 +65,9 @@ export default {
     refreshInterval: {
       between: between(500, 10000)
     },
+    resolution: {
+      between: between(10, 10000)
+    },
     color: {
       required
     }
@@ -66,7 +75,8 @@ export default {
   data () {
     return {
       name: '',
-      refreshInterval: null,
+      refreshInterval: 1000,
+      resolution: 10,
       color: {
         hex: '#194d33',
         hsl: {

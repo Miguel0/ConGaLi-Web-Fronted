@@ -1,15 +1,15 @@
 <template>
   <div class='cells-template-bar'>
     <ul class='group-selection-bar'>
-      <template v-for="(cellsTemplateGroup, key, index) in tabsDef">
+      <template v-for='(cellsTemplateGroup, key) in tabsDef'>
         <li class='toolbar-button' @click='selectTab(key)'>{{cellsTemplateGroup.title}}</li>
       </template>
     </ul>
     <div class='groups-template-bar'>
-      <template v-for="(cellsTemplateGroup, key, index) in tabsDef">
+      <template v-for="cellsTemplateGroup in tabsDef">
         <div class='group-template-container' v-show='current === cellsTemplateGroup'>
-          <template v-for="(cellTemplate, key, index) in cellsTemplateGroup.cellsTemplates">
-            <div class='template-container'>
+          <template v-for="cellTemplate in cellsTemplateGroup.cellsTemplates">
+            <div class='template-container' draggable='true' @dragstart='startTemplateDrag(cellTemplate, $event)'>
               <img :src="cellTemplate.imgSrc" />
               <p>{{cellTemplate.name}}</p>
             </div>
@@ -29,12 +29,15 @@ export default {
       if (tab && tab !== this.$data.current) {
         this.$data.current = tab
       }
+    },
+    startTemplateDrag (cellTemplate, event) {
+      event.dataTransfer.setData('text/json', JSON.stringify(cellTemplate))
     }
   },
   socket: {
     events: {
       setTemplateCellsOptions (data) {
-        console.error('Refreshing templateCellsOptions with data: ' + JSON.stringify(data))
+        console.debug('Refreshing templateCellsOptions with data: ' + JSON.stringify(data))
         this.$data.tabsDef = data
         this.selectTab()
       }
@@ -47,7 +50,7 @@ export default {
     }
   },
   mounted () {
-    this.selectTab()
+    // this.$socket.emit('getTemplateCellsOptions')
   }
 }
 </script>

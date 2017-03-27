@@ -6,7 +6,7 @@
       <button class='toolbar-button' @click='killGame'>Kill Game</button>
     </div>
     <cells-template-bar />
-    <canvas id='boardCanvas' @click.left.prevent='addCell'></canvas>
+    <canvas id='boardCanvas' @click.left.prevent='addCell' @dragover.prevent @drop="receivedDroppedElement"></canvas>
   </div>
 </template>
 
@@ -49,24 +49,29 @@ export default {
       return this.$route.params.gameId
     },
     getUserLocalColor () {
-      return localStorage[`user.room.${this.getGameId()}.color`]
+      return sessionStorage[`user.room.${this.getGameId()}.color`]
+    },
+    getResolution () {
+      let resolution = sessionStorage[`user.room.${this.getGameId()}.resolution`]
+      return resolution || 10
     },
     getCanvasData (canvasId) {
       return this.$data.canvasDataObject[canvasId]
     },
-    undrawCell (cellDefinition, canvas, context) {
-      context.clearRect(cellDefinition.gridPosition.x, cellDefinition.gridPosition.y, 10, 10)
+    undrawCell (cellDefinition, canvasData, context) {
+      context.clearRect(cellDefinition.gridPosition.x, cellDefinition.gridPosition.y, canvasData.resolution, canvasData.resolution)
     },
-    drawCell (cellDefinition, canvas, context) {
-      let calculatedContext = context || canvas.getContext('2d')
+    drawCell (cellDefinition, canvasData, context) {
+      let calculatedContext = context || canvasData.canvas.getContext('2d')
 
       calculatedContext.fillStyle = cellDefinition.getUserColor.apply()
       calculatedContext.strokeStyle = calculatedContext.fillStyle
 
-      calculatedContext.fillRect(cellDefinition.gridPosition.x, cellDefinition.gridPosition.y, 10, 10)
+      calculatedContext.fillRect(cellDefinition.gridPosition.x, cellDefinition.gridPosition.y, this.getResolution(), this.getResolution())
     },
     drawBoard (data) {
       let canvasData = this.getCanvasData('boardCanvas')
+      canvasData.resolution = data.resolution
       let context = canvasData.canvas.getContext('2d')
       canvasData.cells = data.cellsGrids[0].cells
 
@@ -78,7 +83,7 @@ export default {
 
           canvasData.cells[x][y].getUserColor = () => color
 
-          this.drawCell(canvasData.cells[x][y], canvasData.canvas, context)
+          this.drawCell(canvasData.cells[x][y], canvasData, context)
         }
       }
     },
@@ -128,29 +133,59 @@ export default {
     },
     killGame () {
     },
-    addCell (event) {
-      let canvasData = this.getCanvasData('boardCanvas')
-      let position = this.getMouse(event, canvasData)
-
-      let gridPosition = {x: Math.round((position.x - 5) / 10) * 10, y: Math.round((position.y - 5) / 10) * 10}
+    /*
+     * This will normalize the given coordinates to they possible positions in the grid, to allow the client to draw the cell
+     * in that position as the server allegedly will do
+     */
+    normalizeGridPosition (position, canvasData) {
+      return {
+        x: Math.round((position.x - (this.getResolution() / 2)) / this.getResolution()) * this.getResolution(),
+        y: Math.round((position.y - (this.getResolution() / 2)) / this.getResolution()) * this.getResolution()}
+    },
+    createCell (position, canvasData) {
+      let gridPosition = this.normalizeGridPosition(position, canvasData)
+      let cellData = null
 
       if (!canvasData.cells[gridPosition.x]) {
         canvasData.cells[gridPosition.x] = {}
       }
 
       if (!canvasData.cells[gridPosition.x][gridPosition.y]) {
-        let cellData = {
+        cellData = {
           eventPosition: position,
-          gridPosition: gridPosition,
-          getUserColor: this.getUserLocalColor
+          gridPosition: gridPosition
         }
+        cellData.getUserColor = this.getUserLocalColor
 
         console.log('new Cell created: ' + JSON.stringify(cellData))
         canvasData.cells[gridPosition.x][gridPosition.y] = cellData
+      }
 
-        this.drawCell(cellData, canvasData.canvas)
+      return cellData
+    },
+    addCell (event) {
+      let canvasData = this.getCanvasData('boardCanvas')
+      let cellData = this.createCell(this.getMouse(event, canvasData), canvasData)
 
-        this.$socket.emit('createCell', gridPosition)
+      this.drawCell(cellData, canvasData)
+
+      this.$socket.emit('createCell', cellData)
+    },
+    addTemplateCells (configurationToAdd, position) {
+      this.$socket.emit('createTemplate', {
+        name: configurationToAdd.name,
+        position: position
+      })
+    },
+    receivedDroppedElement (event) {
+      if (event.isTrusted) {
+        let canvasData = this.getCanvasData('boardCanvas')
+        let configurationToAdd = JSON.parse(event.dataTransfer.getData('text/json'))
+        let position = this.getMouse(event, canvasData)
+
+        this.addTemplateCells(configurationToAdd, position)
+      } else {
+        console.error('Received a non trusted drop!!!')
       }
     }
   },
@@ -168,6 +203,9 @@ export default {
       refreshCellsGrid (data) {
         console.error('Refreshing board with data: ' + JSON.stringify(data))
         this.drawBoard(data)
+      },
+      appException (err) {
+        console.error(err)
       }
     }
   },

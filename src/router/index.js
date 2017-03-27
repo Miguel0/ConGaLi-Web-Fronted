@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueWebsocket from 'vue-websocket'
 import Router from 'vue-router'
 import LandingInnerPage from '@/components/LandingInnerPage'
+import AvailableGamesPage from '@/components/AvailableGamesPage'
 import ConwaysGamePlaceholder from '@/components/ConwaysGamePlaceholder'
 import Vuelidate from 'vuelidate'
 
@@ -20,6 +21,11 @@ export default new Router({
       path: '/game/:gameId',
       name: 'Game',
       component: ConwaysGamePlaceholder
+    },
+    {
+      path: '/game',
+      name: 'Available Games',
+      component: AvailableGamesPage
     }
   ]
 })

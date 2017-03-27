@@ -1,7 +1,13 @@
 <template>
-  <div class='landing-inner-page'>
-    <button @click='toggleCreateGameModal'>Create Game</button>
-    <create-game-modal v-if='showCreateGameModal' v-on:createGame='createGame' />
+  <div class='available-games-page'>
+    <div class='available-games-toolbar'>
+      <button @click='toggleCreateGameModal'>Create Game</button>
+      <create-game-modal v-if='showCreateGameModal' v-on:createGame='createGame' />
+    </div>
+
+    <ul class='game-selection-list' v-for="(cellsTemplateGroup, key, index) in tabsDef">
+      <li class='toolbar-button' @click='selectTab(key)'>{{cellsTemplateGroup.title}}</li>
+    </ul>
   </div>
 </template>
 
@@ -9,7 +15,7 @@
 import CreateGameModal from './modal/CreateGameModal.vue'
 
 export default {
-  name: 'landing-inner-page',
+  name: 'available-games-page',
   components: {
     CreateGameModal
   },
@@ -54,6 +60,9 @@ export default {
       error (err) {
         console.error('Websocket error!', err)
       },
+      appException (err) {
+        console.log(err)
+      },
       gameCreated (data) {
         console.log('Game creation confirmed with id: ' + data.gameName)
 
@@ -67,7 +76,23 @@ export default {
   },
   data () {
     return {
-      showCreateGameModal: false
+      showCreateGameModal: false,
+      gameList: [
+        { name: 'A game',
+          users: [
+            {
+              id: 'anId',
+              name: 'AUsername',
+              color: '#000000'
+            },
+            {
+              id: 'anId',
+              name: 'AUsername',
+              color: '#000000'
+            }
+          ]
+        }
+      ]
     }
   }
 }
