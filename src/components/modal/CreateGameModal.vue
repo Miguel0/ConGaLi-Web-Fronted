@@ -1,8 +1,8 @@
 <template>
   <generic-modal>
-    <slot name='header'>Create Game</slot>
+    <p slot='header'>Create Game</p>
 
-    <slot name='body'>
+    <div slot="body">
 
       <div class="form-group" v-bind:class="{ 'form-group--error': $v.name.$error }">
         <label class="form__label">Name</label>
@@ -29,25 +29,27 @@
       </div>
       <span class="form-group__message" v-if="!$v.color.required">Field is required</span>
 
-    </slot>
+    </div>
 
-    <slot name='footer'>
+    <div slot="footer">
 
       <button class='modal-default-button' @click.prevent='$emit("close")'>Cancel</button>
       <button class='modal-default-button' @click.prevent='propagateNewGameInitialData'>Create Game</button>
 
-    </slot>
+    </div>
   </generic-modal>
 </template>
 
 <script>
 import { required, minLength, between } from 'vuelidate/lib/validators'
 import { Compact } from 'vue-color'
+import GenericModal from './GenericModal.vue'
 
 export default {
   name: 'create-game-modal',
   components: {
-    'color-picker': Compact
+    'color-picker': Compact,
+    'generic-modal': GenericModal
   },
   methods: {
     propagateNewGameInitialData () {
@@ -106,6 +108,7 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
+
 .form-group--error+.form-group__message {
     display: block;
     color: #f57f6c;

@@ -7,16 +7,16 @@
 
             <div class='modal-header'>
               <h1>
-                <slot name='header'></slot>
+                <slot name='header'>Header title</slot>
               </h1>
             </div>
 
             <div class='modal-body'>
-              <slot name='body'></slot>
+              <slot name='body'>Body content</slot>
             </div>
 
             <div class='modal-footer'>
-              <slot name='footer'></slot>
+              <slot name='footer'>Footer content</slot>
             </div>
           </div>
         </div>
@@ -33,7 +33,7 @@ export default {
 </script>
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 
 .modal-mask {
   position: fixed;
