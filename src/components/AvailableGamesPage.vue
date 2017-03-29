@@ -106,50 +106,7 @@ export default {
   data () {
     return {
       showCreateGameModal: false,
-      gameList: [
-        { name: 'A game',
-          createdOn: new Date().toISOString(),
-          ownerSocketId: 'asdfasdfasdfasdf',
-          users: [
-            {
-              id: 'anId',
-              name: 'AUsername',
-              color: '#000000'
-            },
-            {
-              id: 'anId',
-              name: 'AUsername',
-              color: '#000000'
-            }
-          ]
-        },
-        { name: 'Another game',
-          createdOn: new Date().toISOString(),
-          ownerSocketId: 'asdfasdfasdfasdf',
-          users: [
-            {
-              id: 'anId',
-              name: 'AUsername',
-              color: '#000000'
-            }
-          ]
-        },
-        { name: 'Another game',
-          createdOn: new Date().toISOString(),
-          ownerSocketId: 'asdfasdfasdfasdf',
-          users: [
-            {
-              id: 'anId',
-              name: 'AUsername',
-              color: '#000000'
-            },
-            {
-              id: 'anId',
-              name: 'AUsername',
-              color: '#000000'
-            }
-          ]
-        }]
+      gameList: []
     }
   },
   mounted () {
