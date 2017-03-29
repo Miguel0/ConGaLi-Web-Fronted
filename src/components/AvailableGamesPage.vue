@@ -1,12 +1,24 @@
 <template>
   <div class='available-games-page'>
     <div id="fake-nav">
-      <a class='noselect' @click.prevent='toggleCreateGameModal'>New game</a>
+      <a @click.prevent='toggleCreateGameModal'>Create a new game</a>
       <create-game-modal v-if='showCreateGameModal' v-on:createGame='createGame' />
     </div>
 
-    <ul class='game-selection-list' v-for="(cellsTemplateGroup, key, index) in tabsDef">
-      <li class='toolbar-button' @click='selectTab(key)'>{{cellsTemplateGroup.title}}</li>
+    <div id="available-games-toolbar">
+      <a class='available-games-toolbar-action actionButton' @click.prevent='refreshAvailableGamesList'>Refresh list</a>
+    </div>
+
+    <ul class='game-selection-list'>
+      <template v-for="(gameDescriptor, key, index) in gameList">
+        <li class='game-selection-item' :class="{'unevenItem': key % 2 === 0}">
+          <span>{{gameDescriptor.name}} | </span>
+          <span>{{gameDescriptor.createdOn}} | </span>
+          <span>{{gameDescriptor.ownerSocketId}} | </span>
+          <span>{{gameDescriptor.users.length}}</span>
+          <a class='game-selection-item-button actionButton' @click.prevent='joinGame(gameDescriptor)'>Join game</a>
+        </li>
+      </template>
     </ul>
   </div>
 </template>
@@ -53,6 +65,12 @@ export default {
       sessionStorage[`user.room.${data.gameName}.color`] = '#' + data.userData.color
       sessionStorage[`user.room.${data.gameName}.refreshInterval`] = data.refreshInterval
       sessionStorage[`user.room.${data.gameName}.resolution`] = data.resolution
+    },
+    joinGame: function (gameDescriptor) {
+
+    },
+    refreshAvailableGamesList: function () {
+      this.$socket.emit('getAvailableGames', '')
     }
   },
   socket: {
@@ -71,33 +89,51 @@ export default {
 
         console.log('Redirecting to game page')
         this.$router.push('/game/' + data.gameName)
+      },
+      receiveAvailableGames (gameDescriptors) {
+        this.$data.gameList = gameDescriptors
       }
     }
   },
   data () {
     return {
       showCreateGameModal: false,
-      gameList: [
-        { name: 'A game',
-          users: [
-            {
-              id: 'anId',
-              name: 'AUsername',
-              color: '#000000'
-            },
-            {
-              id: 'anId',
-              name: 'AUsername',
-              color: '#000000'
-            }
-          ]
-        }
-      ]
+      gameList: []
     }
+  },
+  mounted () {
+    this.refreshAvailableGamesList()
   }
 }
 </script>
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
+.game-selection-list {
+  /* width: 100%; */
+}
+
+.game-selection-item {
+  width: 96%;
+  text-align: left;
+  padding: 0.5em;
+  vertical-align: middle;
+}
+
+.unevenItem {
+  background-color: lightGray;
+}
+
+.game-selection-item-button {
+  float:right;
+}
+
+.available-games-toolbar {
+  width: 96%;
+  padding: 2em;
+}
+
+.available-games-toolbar-action {
+  float: right;
+}
 </style>

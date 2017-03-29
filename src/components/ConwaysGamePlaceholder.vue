@@ -1,9 +1,9 @@
 <template>
   <div class='conwaysGamePlaceholder'>
-    <div id="fake-nav" class='toolbar noselect'>
-      <a class='toolbar-button actionButton noselect' @click.prevent='startGame'>Start Game</a>
-      <a class='toolbar-button actionButton noselect' @click.prevent='pauseGame'>Pause Game</a>
-      <a class='toolbar-button actionButton noselect' @click.prevent='killGame'>Kill Game</a>
+    <div id="fake-nav" class='toolbar'>
+      <a class='toolbar-button actionButton' @click.prevent='startGame'>Start Game</a>
+      <a class='toolbar-button actionButton' @click.prevent='pauseGame'>Pause Game</a>
+      <a class='toolbar-button actionButton' @click.prevent='killGame'>Kill Game</a>
     </div>
     <cells-template-bar />
     <canvas id='boardCanvas' class='noselect' @click.left.prevent='addCell' @dragover.prevent @drop="receivedDroppedElement"></canvas>

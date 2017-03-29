@@ -1,7 +1,7 @@
 <template>
   <div class='landing-inner-page'>
-    <div id="fake-nav noselect">
-      <a class="noselect" @click.prevent='goToGames'>Go to games</a>
+    <div id="fake-nav">
+      <a class="actionButton" @click.prevent='goToGames'>Go to games</a>
     </div>
     <article class="landingPageArticle" itemprop="text">
       <h1>Conway's Web Game</h1>

@@ -32,8 +32,8 @@
     </div>
 
     <div slot="footer" class="noselect">
-      <a class='modal-default-button actionButton noselect' @click.prevent='$emit("close")'>Cancel</a>
-      <a class='modal-default-button actionButton noselect' @click.prevent='propagateNewGameInitialData'>Create Game</a>
+      <a class='modal-default-button actionButton' @click.prevent='$emit("close")'>Cancel</a>
+      <a class='modal-default-button actionButton' @click.prevent='propagateNewGameInitialData'>Create Game</a>
     </div>
   </generic-modal>
 </template>
