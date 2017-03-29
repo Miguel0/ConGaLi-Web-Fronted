@@ -9,17 +9,25 @@
       <a class='available-games-toolbar-action actionButton' @click.prevent='refreshAvailableGamesList'>Refresh list</a>
     </div>
 
-    <ul class='game-selection-list'>
+    <table class='game-selection-table noselect' draggable='false'>
+      <tr class='game-selection-header noselect'>
+        <th>Game Name</th>
+        <th>Creation Date</th> 
+        <th>Owner Socket Id</th>
+        <th>Users connected</th>
+      </tr>
       <template v-for="(gameDescriptor, key, index) in gameList">
-        <li class='game-selection-item' :class="{'unevenItem': key % 2 === 0}">
-          <span>{{gameDescriptor.name}} | </span>
-          <span>{{gameDescriptor.createdOn}} | </span>
-          <span>{{gameDescriptor.ownerSocketId}} | </span>
-          <span>{{gameDescriptor.users.length}}</span>
-          <a class='game-selection-item-button actionButton' @click.prevent='joinGame(gameDescriptor)'>Join game</a>
-        </li>
+        <tr class='game-selection-item' :class="{'unevenItem': key % 2 === 0}" draggable='false'>
+          <td>{{gameDescriptor.name}}</td>
+          <td>{{gameDescriptor.createdOn}}</td>
+          <td>{{gameDescriptor.ownerSocketId}}</td>
+          <td>{{gameDescriptor.users.length}}</td>
+          <td>
+            <a class='game-selection-item-button actionButton' @click.prevent='joinGame(gameDescriptor)'>Join game</a>
+          </td>
+        </tr>
       </template>
-    </ul>
+    </table>
   </div>
 </template>
 
@@ -98,7 +106,50 @@ export default {
   data () {
     return {
       showCreateGameModal: false,
-      gameList: []
+      gameList: [
+        { name: 'A game',
+          createdOn: new Date().toISOString(),
+          ownerSocketId: 'asdfasdfasdfasdf',
+          users: [
+            {
+              id: 'anId',
+              name: 'AUsername',
+              color: '#000000'
+            },
+            {
+              id: 'anId',
+              name: 'AUsername',
+              color: '#000000'
+            }
+          ]
+        },
+        { name: 'Another game',
+          createdOn: new Date().toISOString(),
+          ownerSocketId: 'asdfasdfasdfasdf',
+          users: [
+            {
+              id: 'anId',
+              name: 'AUsername',
+              color: '#000000'
+            }
+          ]
+        },
+        { name: 'Another game',
+          createdOn: new Date().toISOString(),
+          ownerSocketId: 'asdfasdfasdfasdf',
+          users: [
+            {
+              id: 'anId',
+              name: 'AUsername',
+              color: '#000000'
+            },
+            {
+              id: 'anId',
+              name: 'AUsername',
+              color: '#000000'
+            }
+          ]
+        }]
     }
   },
   mounted () {
@@ -109,8 +160,17 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
-.game-selection-list {
-  /* width: 100%; */
+
+.game-selection-table {
+  width: 100%;
+}
+
+.game-selection-table th {
+  padding: 0.5em;
+  vertical-align: middle;
+  background-color: darkGrey;
+  cursor: default;
+  color: #FFFFFF;
 }
 
 .game-selection-item {
@@ -120,12 +180,19 @@ export default {
   vertical-align: middle;
 }
 
+.game-selection-item td {
+  padding: 0.5em;
+}
+
 .unevenItem {
   background-color: lightGray;
 }
 
 .game-selection-item-button {
   float:right;
+  margin-top:-8px;
+  margin-bottom:-8px;
+  margin-right:-8px;
 }
 
 .available-games-toolbar {
