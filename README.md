@@ -24,14 +24,14 @@ This particular implementation creates a Multiplayer app version of Game of Life
 - [x] **\(Originally requested)** This client allows multiple clients to share the same, synchronized world view.
 - [ ] **\(Originally requested)** Each client is assigned a random color on initialization.
 - [x] **\(Originally requested)** Creating a point on any grid will create a live cell on that grid with the client’s color. This change should be synchronized across all connected clients. (You can use any mechanism to achieve this, such as polling, comet or WebSocket).
-- [ ] **\(Originally requested)** When a dead cell revives by rule #4 , it will be given a color that is the average of its neighbours (that revive it).
+- [x] **\(Originally requested)** When a dead cell revives by rule #4 , it will be given a color that is the average of its neighbours (that revive it).
+- [x] **\(Originally requested)** Include a toolbar that places some predefined patterns at random places with the player’s color, such as those found at [here] (https://en.wikipedia.org/wiki/Conway’s_Game_of_Life#Examples_of_patterns) (not necessary to implement all, just 3 - 4 is fine).
 - [ ] **\(Requirement enhancement)** _Extract canvas drawer code onto it's own module._
 - [ ] **\(Requirement enhancement)** _Implement some kind of users authentication._
 - [ ] **\(Requirement enhancement)** _Implement some kind of storage for users data._
 - [ ] **\(Requirement enhancement)** _Implement an acceptable Application Error handling mechanism Across the App._
 - [ ] **\(Requirement enhancement)** _Implement an acceptable logging mechanism across the App._
 - [ ] **\(Requirement enhancement)** _Implement test for Components._
-- [ ] **\(Requirement enhancement)** _Implement test for WebSockets endpoints._
 - [ ] **\(Requirement enhancement)** _Get to a coverage of at least 70%._
 
 ## Build Setup
