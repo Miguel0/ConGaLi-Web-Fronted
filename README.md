@@ -22,7 +22,7 @@ This particular implementation creates a Multiplayer app version of Game of Life
 ## TODO list
 - [x] **\(Originally requested)** The game should tick automatically at a predefined interval, at say, 1 step per second.
 - [x] **\(Originally requested)** This client allows multiple clients to share the same, synchronized world view.
-- [ ] **\(Originally requested)** Each client is assigned a random color on initialization.
+- [x] **\(Originally requested)** Each client is assigned a random color on initialization.
 - [x] **\(Originally requested)** Creating a point on any grid will create a live cell on that grid with the client’s color. This change should be synchronized across all connected clients. (You can use any mechanism to achieve this, such as polling, comet or WebSocket).
 - [x] **\(Originally requested)** When a dead cell revives by rule #4 , it will be given a color that is the average of its neighbours (that revive it).
 - [x] **\(Originally requested)** Include a toolbar that places some predefined patterns at random places with the player’s color, such as those found at [here] (https://en.wikipedia.org/wiki/Conway’s_Game_of_Life#Examples_of_patterns) (not necessary to implement all, just 3 - 4 is fine).
