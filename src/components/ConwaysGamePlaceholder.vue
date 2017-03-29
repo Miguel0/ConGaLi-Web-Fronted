@@ -1,12 +1,12 @@
 <template>
   <div class='conwaysGamePlaceholder'>
-    <div class='toolbar'>
-      <button class='toolbar-button' @click='startGame'>Start Game</button>
-      <button class='toolbar-button' @click='pauseGame'>Pause Game</button>
-      <button class='toolbar-button' @click='killGame'>Kill Game</button>
+    <div id="fake-nav" class='toolbar noselect'>
+      <a class='toolbar-button actionButton noselect' @click.prevent='startGame'>Start Game</a>
+      <a class='toolbar-button actionButton noselect' @click.prevent='pauseGame'>Pause Game</a>
+      <a class='toolbar-button actionButton noselect' @click.prevent='killGame'>Kill Game</a>
     </div>
     <cells-template-bar />
-    <canvas id='boardCanvas' @click.left.prevent='addCell' @dragover.prevent @drop="receivedDroppedElement"></canvas>
+    <canvas id='boardCanvas' class='noselect' @click.left.prevent='addCell' @dragover.prevent @drop="receivedDroppedElement"></canvas>
   </div>
 </template>
 

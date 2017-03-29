@@ -1,7 +1,7 @@
 <template>
   <div class='available-games-page'>
-    <div class='available-games-toolbar'>
-      <button @click='toggleCreateGameModal'>Create Game</button>
+    <div id="fake-nav">
+      <a class='noselect' @click.prevent='toggleCreateGameModal'>New game</a>
       <create-game-modal v-if='showCreateGameModal' v-on:createGame='createGame' />
     </div>
 

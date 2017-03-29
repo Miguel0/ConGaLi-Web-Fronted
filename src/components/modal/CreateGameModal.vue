@@ -1,6 +1,6 @@
 <template>
   <generic-modal>
-    <p slot='header'>Create Game</p>
+    <h2 slot='header'>Create Game</h2>
 
     <div slot="body">
 
@@ -31,24 +31,22 @@
 
     </div>
 
-    <div slot="footer">
-
-      <button class='modal-default-button' @click.prevent='$emit("close")'>Cancel</button>
-      <button class='modal-default-button' @click.prevent='propagateNewGameInitialData'>Create Game</button>
-
+    <div slot="footer" class="noselect">
+      <a class='modal-default-button actionButton noselect' @click.prevent='$emit("close")'>Cancel</a>
+      <a class='modal-default-button actionButton noselect' @click.prevent='propagateNewGameInitialData'>Create Game</a>
     </div>
   </generic-modal>
 </template>
 
 <script>
 import { required, minLength, between } from 'vuelidate/lib/validators'
-import { Compact } from 'vue-color'
+import { Chrome } from 'vue-color'
 import GenericModal from './GenericModal.vue'
 
 export default {
   name: 'create-game-modal',
   components: {
-    'color-picker': Compact,
+    'color-picker': Chrome,
     'generic-modal': GenericModal
   },
   methods: {
@@ -80,26 +78,7 @@ export default {
       refreshInterval: 1000,
       resolution: 10,
       color: {
-        hex: '#194d33',
-        hsl: {
-          h: 150,
-          s: 0.5,
-          l: 0.2,
-          a: 1
-        },
-        hsv: {
-          h: 150,
-          s: 0.66,
-          v: 0.30,
-          a: 1
-        },
-        rgba: {
-          r: 25,
-          g: 77,
-          b: 51,
-          a: 1
-        },
-        a: 1
+        hex: ('#' + (Math.floor(Math.random() * parseInt('FFFFFF', 16)) + 1).toString(16))
       }
     }
   }
@@ -108,7 +87,6 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
-
 .form-group--error+.form-group__message {
     display: block;
     color: #f57f6c;
