@@ -1,5 +1,5 @@
 <template>
-  <generic-modal>
+  <generic-modal v-on:modalBackgroundClicked='cancel'>
     <h2 slot='header'>Create Game</h2>
 
     <div slot="body">
@@ -32,8 +32,8 @@
     </div>
 
     <div slot="footer" class="noselect">
-      <a class='modal-default-button actionButton' @click.prevent='$emit("close")'>Cancel</a>
-      <a class='modal-default-button actionButton' @click.prevent='propagateNewGameInitialData'>Create Game</a>
+      <a class='modal-default-button actionButton' @click.prevent='cancel'>Cancel</a>
+      <a class='modal-default-button actionButton' @click.prevent='propagateData'>Create Game</a>
     </div>
   </generic-modal>
 </template>
@@ -50,11 +50,14 @@ export default {
     'generic-modal': GenericModal
   },
   methods: {
-    propagateNewGameInitialData () {
+    propagateData () {
       this.$emit('createGame', this.$data)
     },
     onChangeColor (colorSelected) {
       this.$data.color = colorSelected
+    },
+    cancel () {
+      this.$emit('cancel')
     }
   },
   validations: {
@@ -85,19 +88,5 @@ export default {
 }
 </script>
 
-<!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
-.form-group--error+.form-group__message {
-    display: block;
-    color: #f57f6c;
-}
-
-.form-group__message {
-    font-size: .75rem;
-    line-height: 1;
-    display: none;
-    margin-left: 14px;
-    margin-top: -1.6875rem;
-    margin-bottom: .9375rem;
-}
 </style>

@@ -2,7 +2,7 @@
   <div class='available-games-page'>
     <div id="fake-nav">
       <a @click.prevent='toggleCreateGameModal'>Create a new game</a>
-      <create-game-modal v-if='showCreateGameModal' v-on:createGame='createGame' />
+      <create-game-modal v-if='showCreateGameModal' v-on:createGame='createGame' v-on:cancel='toggleCreateGameModal'/>
     </div>
 
     <div id="available-games-toolbar">
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+
 import CreateGameModal from './modal/CreateGameModal.vue'
 
 export default {
@@ -60,25 +61,17 @@ export default {
       console.log('data sent to server: ' + JSON.stringify(newGameData))
     },
     saveDataIntoLocalStorage: function (data) {
-      /* TODO check this: if (!supportsLocalStorage()) */
-
-      if (!sessionStorage['user.name']) {
-        sessionStorage['user.name'] = data.userData.name
-      }
-
-      if (!sessionStorage[`user.room.${data.gameName}`]) {
-        sessionStorage[`user.room.${data.gameName}`] = data.gameName
-      }
-
-      sessionStorage[`user.room.${data.gameName}.color`] = '#' + data.userData.color
-      sessionStorage[`user.room.${data.gameName}.refreshInterval`] = data.refreshInterval
-      sessionStorage[`user.room.${data.gameName}.resolution`] = data.resolution
+      this.cgStorage.saveGameData({
+        name: data.gameName,
+        refreshInterval: data.refreshInterval,
+        resolution: data.resolution
+      })
     },
     joinGame: function (gameDescriptor) {
 
     },
     refreshAvailableGamesList: function () {
-      this.$socket.emit('getAvailableGames', '')
+      this.$socket.emit('getAvailableGames', {user: { id: this.cgStorage.readUserData().id }})
     }
   },
   socket: {
@@ -92,7 +85,7 @@ export default {
       gameCreated (data) {
         console.log('Game creation confirmed with id: ' + data.gameName)
 
-        console.log('Saving data into sessionStorage...')
+        console.log('Saving data into storage...')
         this.saveDataIntoLocalStorage(data)
 
         console.log('Redirecting to game page')
@@ -115,9 +108,7 @@ export default {
 }
 </script>
 
-<!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
-
 .game-selection-table {
   width: 100%;
 }

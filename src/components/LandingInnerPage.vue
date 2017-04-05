@@ -1,8 +1,5 @@
 <template>
   <div class='landing-inner-page'>
-    <div id="fake-nav">
-      <a class="actionButton" @click.prevent='goToGames'>Go to games</a>
-    </div>
     <article class="landingPageArticle" itemprop="text">
       <h1>Conway's Web Game</h1>
       <p>This implementation is ment to be used with <a href="https://github.com/Miguel0/conwaysGame-Backend">Conway's Game Backend</a>.</p>
@@ -33,17 +30,10 @@ export default {
   name: 'landing-inner-page',
   components: {
     CreateGameModal
-  },
-  methods: {
-    goToGames: function () {
-      console.log('Redirecting to games page')
-      this.$router.push('/game/')
-    }
   }
 }
 </script>
 
-<!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
 .landingPageArticle {
   text-align: left;

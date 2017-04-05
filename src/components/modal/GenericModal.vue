@@ -1,8 +1,8 @@
 <template>
-  <div class='genericModal'>
+  <div class='genericModal' id='genericModal'>
     <transition name='modal'>
       <div class='modal-mask'>
-        <div class='modal-wrapper'>
+        <div class='modal-wrapper' id='modal-wrapper' @click.prevent="modalBackgroundClicked">
           <div class='modal-container'>
 
             <div class='modal-header'>
@@ -28,11 +28,17 @@
 <script>
 
 export default {
-  name: 'generic-modal'
+  name: 'session-manager-modal',
+  methods: {
+    modalBackgroundClicked (e) {
+      if (e.target.id === 'modal-wrapper') {
+        this.$emit('modalBackgroundClicked')
+      }
+    }
+  }
 }
 </script>
 
-<!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style>
 
 .modal-mask {
@@ -76,15 +82,6 @@ export default {
   float: right;
 }
 
-/*
- * The following styles are auto-applied to elements with
- * transition='modal' when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
-
 .modal-enter {
   opacity: 0;
 }
@@ -97,5 +94,27 @@ export default {
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+.form-group {
+  margin-bottom: 0.8em;
+}
+
+.form-group--error {
+  margin-bottom: 2em;
+}
+
+.form-group--error+.form-group__message {
+  display: block;
+  color: #f57f6c;
+}
+
+.form-group__message {
+  font-size: .75rem;
+  line-height: 1;
+  display: none;
+  margin-left: 14px;
+  margin-top: -1.6875rem;
+  margin-bottom: .9375rem;
 }
 </style>

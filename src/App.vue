@@ -1,13 +1,91 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view></router-view>
+    <img class="mainLogo" src="./assets/logo.png">
+    <session-manager-modal v-if='showSessionManagerModal || !cgStorage.isAuthenticated()' v-on:cancel='toggleSessionModalActive' v-on:forgotPassword='forgotPassword' v-on:signUp='signUp' v-on:logIn='logIn' />
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <ul class="nav navbar-nav">
+          <li><router-link class="actionButton" to="/">Home</router-link></li>
+          <li><router-link class="actionButton" to="/game">Available Games</router-link></li>
+          <li v-if="cgStorage.isAuthenticated()"><a class="actionButton noselect" @click.prevent="logOut">logOut</a></li>
+          <li v-else><router-link class="actionButton" to="/logIn">logIn</router-link></li>
+        </ul>
+      </div>    
+    </nav>
+    <router-view>
+    </router-view>
   </div>
 </template>
 
 <script>
+
+import SessionManagerModal from './components/modal/SessionManagerModal'
+
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+    'session-manager-modal': SessionManagerModal
+  },
+  props: {
+    'showSessionModal': {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    forgotPassword (userData) {
+    },
+    signUp (userData) {
+      this.$socket.emit('signUp', userData)
+      console.log('Data sent: ' + JSON.stringify(userData))
+    },
+    logIn (userData) {
+      this.$socket.emit('logIn', userData)
+    },
+    logOut () {
+      if (confirm('Do you wan\'t to close your session?')) {
+        this.$socket.emit('logOut')
+      }
+    },
+    toggleSessionModalActive () {
+      this.$data.showSessionManagerModal = !this.$data.showSessionManagerModal
+    }
+  },
+  socket: {
+    events: {
+      error (err) {
+        console.log('Websocket error!', JSON.stringify(err))
+      },
+      appException (err) {
+        console.log(JSON.stringify(err))
+      },
+      signedUp (data) {
+        console.log('SignedUp user data received: ', JSON.stringify(data))
+
+        data.isAuthenticated = true
+        this.cgStorage.saveUserData(data)
+        this.$router.push('/game')
+      },
+      loggedIn (data) {
+        console.log('LoggedIn user data received: ', JSON.stringify(data))
+
+        data.isAuthenticated = true
+        this.cgStorage.saveUserData(data)
+        this.$router.push('/game')
+      },
+      loggedOut (data) {
+        this.cgStorage.saveAppData({isAuthenticated: false})
+        console.log('LoggedOut!')
+
+        this.$router.push('/')
+      }
+    }
+  },
+  data () {
+    return {
+      showSessionManagerModal: this.showSessionModal
+    }
+  }
 }
 </script>
 
@@ -46,6 +124,10 @@ a {
   cursor: pointer;
 }
 
+.mainLogo {
+  width: 8em;
+  height: 8em;
+}
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -75,6 +157,8 @@ a {
   padding: 10px 25px;
   text-decoration: none;
   cursor: pointer;
+  margin-left: 0.5px;
+  margin-right: 0.5px;
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
