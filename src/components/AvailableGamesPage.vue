@@ -72,7 +72,7 @@ export default {
         id: this.cgStorage.readUserData().id
       }
 
-      this.$socket.emit('joinGame', newGameData)
+      this.$socket.emit('joinGame', gameDescriptor)
     },
     refreshAvailableGamesList: function () {
       this.$socket.emit('getAvailableGames', {user: { id: this.cgStorage.readUserData().id }})

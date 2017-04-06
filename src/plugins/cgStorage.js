@@ -26,6 +26,7 @@ const CGStorage = function () {
     let appData = this.readAppData()
 
     appData.user = userData
+    appData.user.games = {}
 
     appData.isAuthenticated = userData.isAuthenticated !== false
 
