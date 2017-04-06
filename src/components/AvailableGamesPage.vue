@@ -13,14 +13,14 @@
       <tr class='game-selection-header noselect'>
         <th>Game Name</th>
         <th>Creation Date</th> 
-        <th>Owner Socket Id</th>
+        <th>Owner Id</th>
         <th>Users connected</th>
       </tr>
       <template v-for="(gameDescriptor, key, index) in gameList">
         <tr class='game-selection-item' :class="{'unevenItem': key % 2 === 0}" draggable='false'>
           <td>{{gameDescriptor.name}}</td>
           <td>{{gameDescriptor.createdOn}}</td>
-          <td>{{gameDescriptor.ownerSocketId}}</td>
+          <td>{{gameDescriptor.ownerId}}</td>
           <td>{{gameDescriptor.users.length}}</td>
           <td>
             <a class='game-selection-item-button actionButton' @click.prevent='joinGame(gameDescriptor)'>Join game</a>
@@ -50,8 +50,8 @@ export default {
         gameName: newGameSubComponentData.name,
         refreshInterval: newGameSubComponentData.refreshInterval,
         resolution: newGameSubComponentData.resolution,
-        userData: {
-          name: 'name',
+        user: {
+          id: this.cgStorage.readUserData().id,
           color: newGameSubComponentData.color.hex.substr(1)
         }
       }
@@ -68,7 +68,11 @@ export default {
       })
     },
     joinGame: function (gameDescriptor) {
+      gameDescriptor.user = {
+        id: this.cgStorage.readUserData().id
+      }
 
+      this.$socket.emit('joinGame', newGameData)
     },
     refreshAvailableGamesList: function () {
       this.$socket.emit('getAvailableGames', {user: { id: this.cgStorage.readUserData().id }})
@@ -76,14 +80,17 @@ export default {
   },
   socket: {
     events: {
-      error (err) {
-        console.error('Websocket error!', err)
-      },
-      appException (err) {
-        console.log(err)
-      },
       gameCreated (data) {
         console.log('Game creation confirmed with id: ' + data.gameName)
+
+        console.log('Saving data into storage...')
+        this.saveDataIntoLocalStorage(data)
+
+        console.log('Redirecting to game page')
+        this.$router.push('/game/' + data.gameName)
+      },
+      joinedToGame (data) {
+        console.log(`Successful joined game ${JSON.stringify(data)}`)
 
         console.log('Saving data into storage...')
         this.saveDataIntoLocalStorage(data)
