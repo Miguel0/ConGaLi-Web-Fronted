@@ -1,4 +1,4 @@
-# Conway's Web Game Frontend
+# ConGaLi Frontend
 
 
 This implementation is ment to be used with [Conway's Game Backend](https://github.com/Miguel0/conwaysGame-Backend).
