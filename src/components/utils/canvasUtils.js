@@ -1,7 +1,7 @@
 /* eslint no-unused-vars: 1 */
 /* eslint-disable */
 
-function syncCanvasData (canvasData, aDocument) {
+module.exports.syncCanvasData = function (canvasData, aDocument) {
   // initializating position variables
   let computedStyle = aDocument.defaultView.getComputedStyle(canvasData.canvas, null)
 
@@ -19,13 +19,13 @@ function syncCanvasData (canvasData, aDocument) {
   return canvasData
 }
 
-function undrawCell (cellDefinition, canvasData, context) {
+module.exports.undrawCell = function (cellDefinition, canvasData, context) {
   let calculatedContext = context || canvasData.canvas.getContext('2d')
 
   calculatedContext.clearRect(cellDefinition.gridPosition.x, cellDefinition.gridPosition.y, canvasData.resolution, canvasData.resolution)
 }
 
-function drawCell (cellDefinition, canvasData, context) {
+module.exports.drawCell = function (cellDefinition, canvasData, context) {
   let calculatedContext = context || canvasData.canvas.getContext('2d')
 
   calculatedContext.fillStyle = cellDefinition.getUserColor.apply()
@@ -34,7 +34,7 @@ function drawCell (cellDefinition, canvasData, context) {
   calculatedContext.fillRect(cellDefinition.gridPosition.x, cellDefinition.gridPosition.y, canvasData.resolution, canvasData.resolution)
 }
 
-function drawCanvas (canvasData, context) {
+module.exports.drawCanvas = function (canvasData, context) {
   let calculatedContext = context || canvasData.canvas.getContext('2d')
 
   calculatedContext.clearRect(0, 0, canvasData.canvas.width, canvasData.canvas.height)
@@ -54,7 +54,7 @@ function drawCanvas (canvasData, context) {
  * This will normalize the given coordinates to they possible positions in the grid, to allow the client to draw the cell
  * in that position as the server allegedly will do
  */
-function normalizeGridPosition (position, canvasData) {
+module.exports.normalizeGridPosition = function (position, canvasData) {
   return {
     x: Math.round((position.x - (canvasData.resolution / 2)) / canvasData.resolution) * canvasData.resolution,
     y: Math.round((position.y - (canvasData.resolution / 2)) / canvasData.resolution) * canvasData.resolution

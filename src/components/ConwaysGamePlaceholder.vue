@@ -36,14 +36,14 @@ export default {
 
       this.$data.canvasDataObject[elementId] = canvasData
     },
-    getGameId () {
+    getGameName () {
       return this.$route.params.gameId
     },
     getUserLocalColor () {
-      return this.cgStorage.readGameData(this.getGameId()).color
+      return this.cgStorage.readGameData(this.getGameName()).color
     },
     getResolution () {
-      let resolution = this.cgStorage.readGameData(this.getGameId()).resolution
+      let resolution = this.cgStorage.readGameData(this.getGameName()).resolution
       return resolution || 10
     },
     getCanvasData (canvasId) {
@@ -66,7 +66,6 @@ export default {
     startGame () {
       if (this.$socket.option) {
         // Initialize the queryString to play with a particular room always
-        // this.$socket.option.query+= `,gameId=${this.getGameId()}`
         console.log(JSON.stringify(this.$socket.option.query))
       }
 
@@ -90,6 +89,12 @@ export default {
           gridPosition: gridPosition
         }
         cellData.getUserColor = this.getUserLocalColor
+        cellData.game = {
+          id: this.cgStorage.getGameName(),
+          user: {
+            id: this.cgStorage.readUserData().id
+          }
+        }
 
         console.log('new Cell created: ' + JSON.stringify(cellData))
         canvasData.cells[gridPosition.x][gridPosition.y] = cellData
@@ -135,7 +140,7 @@ export default {
         console.error('Websocket error!', err)
       },
       refreshCellsGrid (data) {
-        console.error('Refreshing board with data: ' + JSON.stringify(data))
+        console.log('Refreshing board with data: ' + JSON.stringify(data))
         this.drawBoard(data)
       },
       appException (err) {

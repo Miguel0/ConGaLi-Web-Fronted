@@ -7,7 +7,7 @@
  * we have to worry about padding and borders
  * takes an event and a reference to the element
  */
-function getMouse (e, elementData, element) {
+module.exports.getMouse = function (e, elementData, element) {
   let offsetX = 0
   let offsetY = 0
   let mx
