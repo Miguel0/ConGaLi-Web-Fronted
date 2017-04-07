@@ -1,7 +1,4 @@
-/* eslint no-unused-vars: 1 */
-/* eslint-disable */
-
-module.exports.syncCanvasData = function (canvasData, aDocument) {
+function syncCanvasData (canvasData, aDocument) {
   // initializating position variables
   let computedStyle = aDocument.defaultView.getComputedStyle(canvasData.canvas, null)
 
@@ -19,13 +16,13 @@ module.exports.syncCanvasData = function (canvasData, aDocument) {
   return canvasData
 }
 
-module.exports.undrawCell = function (cellDefinition, canvasData, context) {
+function undrawCell (cellDefinition, canvasData, context) {
   let calculatedContext = context || canvasData.canvas.getContext('2d')
 
   calculatedContext.clearRect(cellDefinition.gridPosition.x, cellDefinition.gridPosition.y, canvasData.resolution, canvasData.resolution)
 }
 
-module.exports.drawCell = function (cellDefinition, canvasData, context) {
+function drawCell (cellDefinition, canvasData, context) {
   let calculatedContext = context || canvasData.canvas.getContext('2d')
 
   calculatedContext.fillStyle = cellDefinition.getUserColor.apply()
@@ -34,8 +31,9 @@ module.exports.drawCell = function (cellDefinition, canvasData, context) {
   calculatedContext.fillRect(cellDefinition.gridPosition.x, cellDefinition.gridPosition.y, canvasData.resolution, canvasData.resolution)
 }
 
-module.exports.drawCanvas = function (canvasData, context) {
+function drawCanvas (canvasData, context) {
   let calculatedContext = context || canvasData.canvas.getContext('2d')
+  console.log(`painting with canvasData = ${JSON.stringify(canvasData)}`)
 
   calculatedContext.clearRect(0, 0, canvasData.canvas.width, canvasData.canvas.height)
 
@@ -54,9 +52,15 @@ module.exports.drawCanvas = function (canvasData, context) {
  * This will normalize the given coordinates to they possible positions in the grid, to allow the client to draw the cell
  * in that position as the server allegedly will do
  */
-module.exports.normalizeGridPosition = function (position, canvasData) {
+function normalizeGridPosition (position, resolution) {
   return {
-    x: Math.round((position.x - (canvasData.resolution / 2)) / canvasData.resolution) * canvasData.resolution,
-    y: Math.round((position.y - (canvasData.resolution / 2)) / canvasData.resolution) * canvasData.resolution
+    x: Math.round((position.x - (resolution / 2)) / resolution) * resolution,
+    y: Math.round((position.y - (resolution / 2)) / resolution) * resolution
   }
 }
+
+this.syncCanvasData = syncCanvasData
+this.undrawCell = undrawCell
+this.drawCell = drawCell
+this.drawCanvas = drawCanvas
+this.normalizeGridPosition = normalizeGridPosition

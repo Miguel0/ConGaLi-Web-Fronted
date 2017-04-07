@@ -3,6 +3,8 @@ import VueWebsocket from 'vue-websocket'
 import Router from 'vue-router'
 import LandingInnerPage from '@/components/LandingInnerPage'
 import AvailableGamesPage from '@/components/AvailableGamesPage'
+import UsersProfiles from '@/components/UsersProfiles'
+import UserProfile from '@/components/UserProfile'
 import ConwaysGamePlaceholder from '@/components/ConwaysGamePlaceholder'
 import ConwaysGameStorage from '@/plugins/cgStorage'
 import Vuelidate from 'vuelidate'
@@ -32,7 +34,19 @@ const router = new Router({
       component: LandingInnerPage
     },
     {
-      path: '/game/:gameId',
+      path: '/user',
+      name: 'User Profiles',
+      meta: { requiresAuth: true },
+      component: UsersProfiles
+    },
+    {
+      path: '/user/:userId',
+      name: 'User Profile',
+      meta: { requiresAuth: true },
+      component: UserProfile
+    },
+    {
+      path: '/user/:userId/game/:gameId',
       name: 'Game',
       meta: { requiresAuth: true },
       component: ConwaysGamePlaceholder

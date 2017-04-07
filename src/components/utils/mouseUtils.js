@@ -1,13 +1,10 @@
-/* eslint no-unused-vars: 1 */
-/* eslint-disable */
-
 /* Creates an object with x and y defined,
  * set to the mouse position relative to the element state
  * If you wanna be super-correct this can be tricky,
  * we have to worry about padding and borders
  * takes an event and a reference to the element
  */
-module.exports.getMouse = function (e, elementData, element) {
+function getMouse (e, elementData, element) {
   let offsetX = 0
   let offsetY = 0
   let mx
@@ -33,3 +30,5 @@ module.exports.getMouse = function (e, elementData, element) {
   // We return a simple javascript object with x and y defined
   return {x: mx, y: my}
 }
+
+this.getMouse = getMouse

@@ -47,11 +47,11 @@ export default {
     createGame: function (newGameSubComponentData) {
       this.toggleCreateGameModal()
       let newGameData = {
-        gameName: newGameSubComponentData.name,
+        name: newGameSubComponentData.name,
         refreshInterval: newGameSubComponentData.refreshInterval,
         resolution: newGameSubComponentData.resolution,
         user: {
-          id: this.cgStorage.readUserData().id,
+          id: this.cgStorage.readLocalUserData().id,
           color: newGameSubComponentData.color.hex.substr(1)
         }
       }
@@ -60,43 +60,39 @@ export default {
 
       console.log('data sent to server: ' + JSON.stringify(newGameData))
     },
-    saveDataIntoLocalStorage: function (data) {
-      this.cgStorage.saveGameData({
-        name: data.gameName,
-        refreshInterval: data.refreshInterval,
-        resolution: data.resolution
-      })
+    saveDataIntoLocalStorage: function (gameData) {
+      this.cgStorage.saveGameData(gameData)
     },
     joinGame: function (gameDescriptor) {
       gameDescriptor.user = {
-        id: this.cgStorage.readUserData().id
+        id: this.cgStorage.readLocalUserData().id
       }
 
       this.$socket.emit('joinGame', gameDescriptor)
     },
     refreshAvailableGamesList: function () {
-      this.$socket.emit('getAvailableGames', {user: { id: this.cgStorage.readUserData().id }})
+      this.$socket.emit('getAvailableGames', {user: { id: this.cgStorage.readLocalUserData().id }})
     }
   },
   socket: {
     events: {
-      gameCreated (data) {
-        console.log('Game creation confirmed with id: ' + data.gameName)
+      gameCreated (gameData) {
+        console.log(`Game creation confirmed with data: ${JSON.stringify(gameData)}`)
 
         console.log('Saving data into storage...')
-        this.saveDataIntoLocalStorage(data)
+        this.saveDataIntoLocalStorage(gameData)
 
         console.log('Redirecting to game page')
-        this.$router.push('/game/' + data.gameName)
+        this.$router.push(`/user/${gameData.ownerUserId}/game/${gameData.id}`)
       },
-      joinedToGame (data) {
-        console.log(`Successful joined game ${JSON.stringify(data)}`)
+      joinedToGame (gameData) {
+        console.log(`Successful joined game ${JSON.stringify(gameData)}`)
 
         console.log('Saving data into storage...')
-        this.saveDataIntoLocalStorage(data)
+        this.saveDataIntoLocalStorage(gameData)
 
         console.log('Redirecting to game page')
-        this.$router.push('/game/' + data.gameName)
+        this.$router.push(`/user/${gameData.ownerUserId}/game/${gameData.id}`)
       },
       receiveAvailableGames (gameDescriptors) {
         this.$data.gameList = gameDescriptors

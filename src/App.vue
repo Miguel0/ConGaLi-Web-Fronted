@@ -63,7 +63,7 @@ export default {
         console.log('SignedUp user data received: ', JSON.stringify(data))
 
         data.isAuthenticated = true
-        this.cgStorage.saveUserData(data)
+        this.cgStorage.saveLocalUserData(data)
         this.$data.showSessionManagerModal = false
         this.$router.push('/game')
       },
@@ -71,12 +71,12 @@ export default {
         console.log('LoggedIn user data received: ', JSON.stringify(data))
 
         data.isAuthenticated = true
-        this.cgStorage.saveUserData(data)
+        this.cgStorage.saveLocalUserData(data)
         this.$data.showSessionManagerModal = false
         this.$router.push('/game')
       },
       loggedOut (data) {
-        this.cgStorage.saveAppData({isAuthenticated: false})
+        this.cgStorage.saveAppData()
         console.log('LoggedOut!')
 
         this.$data.showSessionManagerModal = true

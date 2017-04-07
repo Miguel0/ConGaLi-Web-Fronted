@@ -1,34 +1,54 @@
 const _cgStorage = sessionStorage || localStorage
 
 const CGStorage = function () {
-  this.readGameData = function (gameName) {
-    return this.readUserData().games[gameName]
+  this.readGameData = function (userId, gameId) {
+    return this.readUserData(userId).games[gameId]
   }
 
   this.saveGameData = function (gameData) {
-    let userData = this.readUserData()
+    let userData = this.readUserData(gameData.ownerUserId)
 
-    if (userData.games[gameData.name]) {
+    if (!userData) {
+      userData = gameData.users[gameData.ownerUserId]
+      userData.games = {}
+    }
+
+    if (userData.games[gameData.id]) {
       // TODO thrown or handle better this situation
       throw new Error('game already exists')
     } else {
-      userData.games[gameData.name] = gameData
+      userData.games[gameData.id] = gameData
 
-      return this.saveUserData(userData)
+      return this.saveUserData(gameData.ownerUserId, userData)
     }
   }
 
-  this.readUserData = function () {
-    return this.readAppData().user
+  this.readUserData = function (userId) {
+    return this.readAppData().user[userId]
   }
 
-  this.saveUserData = function (userData) {
+  this.saveUserData = function (userId, userData) {
     let appData = this.readAppData()
 
-    appData.user = userData
-    appData.user.games = appData.user.games || {}
+    appData.user[userId] = userData
 
-    appData.isAuthenticated = userData.isAuthenticated !== false
+    if (!userData.games) {
+      userData.games = {}
+    }
+
+    return this.saveAppData(appData)
+  }
+
+  this.readLocalUserData = function () {
+    let appData = this.readAppData()
+    return appData.user[appData.localUserId]
+  }
+
+  this.saveLocalUserData = function (userData) {
+    let appData = this.saveUserData(userData.id, userData)
+
+    appData.localUserId = userData.id
+    userData.isAuthenticated = userData.isAuthenticated !== false
 
     return this.saveAppData(appData)
   }
@@ -38,12 +58,8 @@ const CGStorage = function () {
 
     if (!appData) {
       console.log('Starting lazy initialization of client data...')
-      appData = {
-        isAuthenticated: false,
-        user: {
-          games: {}
-        }
-      }
+      appData = {user: {}}
+
       this.saveAppData(appData)
       console.log('Lazy initialization of client data done!!!')
 
@@ -60,7 +76,9 @@ const CGStorage = function () {
   }
 
   this.isAuthenticated = function () {
-    return this.readAppData().isAuthenticated
+    let localUserData = this.readLocalUserData()
+
+    return localUserData && localUserData.isAuthenticated
   }
 }
 

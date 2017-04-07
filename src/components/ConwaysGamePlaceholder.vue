@@ -36,14 +36,17 @@ export default {
 
       this.$data.canvasDataObject[elementId] = canvasData
     },
-    getGameName () {
+    getGameOwnerId () {
+      return this.$route.params.userId
+    },
+    getGameId () {
       return this.$route.params.gameId
     },
     getUserLocalColor () {
-      return this.cgStorage.readGameData(this.getGameName()).color
+      return this.cgStorage.readLocalUserData().color
     },
     getResolution () {
-      let resolution = this.cgStorage.readGameData(this.getGameName()).resolution
+      let resolution = this.cgStorage.readGameData(this.getGameOwnerId(), this.getGameId()).resolution
       return resolution || 10
     },
     getCanvasData (canvasId) {
@@ -69,14 +72,25 @@ export default {
         console.log(JSON.stringify(this.$socket.option.query))
       }
 
-      this.$socket.emit('startGame', {cellsGridId: 0})
+      this.$socket.emit('startGame', {
+        cellsGridId: 0,
+        game: {
+          id: this.getGameId(),
+          ownerId: this.getGameOwnerId()
+        },
+        user: {
+          id: this.cgStorage.readLocalUserData().id
+        }
+      })
     },
     pauseGame () {
     },
     killGame () {
     },
     createCell (position, canvasData) {
-      let gridPosition = canvasUtils.normalizeGridPosition(position, canvasData)
+      console.log(`Creating cell for ${JSON.stringify(position)} in ${JSON.stringify(canvasData)}`)
+
+      let gridPosition = canvasUtils.normalizeGridPosition(position, this.getResolution())
       let cellData = null
 
       if (!canvasData.cells[gridPosition.x]) {
@@ -88,13 +102,17 @@ export default {
           eventPosition: position,
           gridPosition: gridPosition
         }
-        cellData.getUserColor = this.getUserLocalColor
+
         cellData.game = {
-          id: this.cgStorage.getGameName(),
-          user: {
-            id: this.cgStorage.readUserData().id
-          }
+          id: this.getGameId(),
+          ownerId: this.getGameOwnerId()
         }
+
+        cellData.user = {
+          id: this.cgStorage.readLocalUserData().id
+        }
+
+        cellData.getUserColor = this.getUserLocalColor
 
         console.log('new Cell created: ' + JSON.stringify(cellData))
         canvasData.cells[gridPosition.x][gridPosition.y] = cellData
@@ -113,7 +131,14 @@ export default {
     addTemplateCells (configurationToAdd, position) {
       this.$socket.emit('createTemplate', {
         name: configurationToAdd.name,
-        position: position
+        position: position,
+        game: {
+          id: this.getGameId(),
+          ownerId: this.getGameOwnerId()
+        },
+        user: {
+          id: this.cgStorage.readLocalUserData().id
+        }
       })
     },
     receivedDroppedElement (event) {
