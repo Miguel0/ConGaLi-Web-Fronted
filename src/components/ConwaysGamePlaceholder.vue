@@ -54,7 +54,7 @@ export default {
     },
     drawBoard (data) {
       let canvasData = this.getCanvasData('boardCanvas')
-      canvasData.resolution = data.resolution
+      canvasData.resolution = data.cellsGrids[0].resolution
       canvasData.cells = data.cellsGrids[0].cells
 
       for (let x in canvasData.cells) {
