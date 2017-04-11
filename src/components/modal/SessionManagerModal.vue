@@ -6,10 +6,10 @@
 
       <ul class="form-switcher">
         <li @click.prevent="isForLogIn = false">
-          <a class="noselect" :class="{'active': isForLogIn}" href="" id="login-form">Login</a>
+          <a class="noselect" :class="{'active': !isForLogIn}" href="" id="login-form">Login</a>
         </li>
         <li class="noselect" @click.prevent="isForLogIn = true">
-          <a :class="{'active': !isForLogIn}" href="" id="register-form">Register</a>
+          <a :class="{'active': isForLogIn}" href="" id="register-form">Register</a>
         </li>
       </ul>
 

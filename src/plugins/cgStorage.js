@@ -6,10 +6,10 @@ const CGStorage = function () {
   }
 
   this.saveGameData = function (gameData) {
-    let userData = this.readUserData(gameData.ownerUserId)
+    let userData = this.readUserData(gameData.ownerId)
 
     if (!userData) {
-      userData = gameData.users[gameData.ownerUserId]
+      userData = gameData.users[gameData.ownerId]
       userData.games = {}
     }
 
@@ -19,7 +19,7 @@ const CGStorage = function () {
     } else {
       userData.games[gameData.id] = gameData
 
-      return this.saveUserData(gameData.ownerUserId, userData)
+      return this.saveUserData(gameData.ownerId, userData)
     }
   }
 

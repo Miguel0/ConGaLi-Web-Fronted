@@ -64,11 +64,14 @@ export default {
       this.cgStorage.saveGameData(gameData)
     },
     joinGame: function (gameDescriptor) {
-      gameDescriptor.user = {
-        id: this.cgStorage.readLocalUserData().id
+      let data = {
+        game: gameDescriptor,
+        user: {
+          id: this.cgStorage.readLocalUserData().id
+        }
       }
 
-      this.$socket.emit('joinGame', gameDescriptor)
+      this.$socket.emit('joinGame', data)
     },
     refreshAvailableGamesList: function () {
       this.$socket.emit('getAvailableGames', {user: { id: this.cgStorage.readLocalUserData().id }})
@@ -83,16 +86,17 @@ export default {
         this.saveDataIntoLocalStorage(gameData)
 
         console.log('Redirecting to game page')
-        this.$router.push(`/user/${gameData.ownerUserId}/game/${gameData.id}`)
+        this.$router.push(`/user/${gameData.ownerId}/game/${gameData.id}`)
       },
-      joinedToGame (gameData) {
-        console.log(`Successful joined game ${JSON.stringify(gameData)}`)
+      joinedToGame (data) {
+        console.log(`Successful joined game ${JSON.stringify(data)}`)
+        let gameData = data.game
 
         console.log('Saving data into storage...')
         this.saveDataIntoLocalStorage(gameData)
 
         console.log('Redirecting to game page')
-        this.$router.push(`/user/${gameData.ownerUserId}/game/${gameData.id}`)
+        this.$router.push(`/user/${gameData.ownerId}/game/${gameData.id}`)
       },
       receiveAvailableGames (gameDescriptors) {
         this.$data.gameList = gameDescriptors
