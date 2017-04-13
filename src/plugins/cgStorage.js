@@ -6,6 +6,7 @@ const CGStorage = function () {
   }
 
   this.saveGameData = function (gameData) {
+    console.log(JSON.stringify(gameData))
     let userData = this.readUserData(gameData.ownerId)
 
     if (!userData) {
@@ -18,7 +19,9 @@ const CGStorage = function () {
       throw new Error('game already exists')
     } else {
       userData.games[gameData.id] = gameData
+      gameData.users = []
 
+      console.log(JSON.stringify(userData))
       return this.saveUserData(gameData.ownerId, userData)
     }
   }
