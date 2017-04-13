@@ -33,7 +33,7 @@
 
     <div slot="footer" class="noselect">
       <a class='modal-default-button actionButton' @click.prevent='cancel'>Cancel</a>
-      <a class='modal-default-button actionButton' @click.prevent='propagateData'>Create Game</a>
+      <a class='modal-default-button actionButton' @click.prevent='propagateData'>Create it!</a>
     </div>
   </generic-modal>
 </template>
@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     propagateData () {
-      this.$emit('createGame', this.$data)
+      this.$emit('accepted', this.$data)
     },
     onChangeColor (colorSelected) {
       this.$data.color = colorSelected

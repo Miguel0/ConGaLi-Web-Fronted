@@ -2,7 +2,8 @@
   <div class='available-games-page'>
     <div id="fake-nav">
       <a @click.prevent='toggleCreateGameModal'>Create a new game</a>
-      <create-game-modal v-if='showCreateGameModal' v-on:createGame='createGame' v-on:cancel='toggleCreateGameModal'/>
+      <create-game-modal v-if='showCreateGameModal' v-on:accepted='createGame' v-on:cancel='toggleCreateGameModal'/>
+      <join-game-modal v-if='showJoinGameModal' v-on:accepted='joinGame' v-on:cancel='toggleJoinGameModal'/>
     </div>
 
     <div id="available-games-toolbar">
@@ -43,6 +44,9 @@ export default {
   methods: {
     toggleCreateGameModal: function () {
       this.$data.showCreateGameModal = !this.$data.showCreateGameModal
+    },
+    toggleJoinGameModal: function () {
+      this.$data.showJoinGameModal = !this.$data.showJoinGameModal
     },
     createGame: function (newGameSubComponentData) {
       this.toggleCreateGameModal()
@@ -106,6 +110,7 @@ export default {
   data () {
     return {
       showCreateGameModal: false,
+      showJoinGameModal: false,
       gameList: []
     }
   },
