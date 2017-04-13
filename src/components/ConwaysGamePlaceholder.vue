@@ -6,7 +6,9 @@
       <a class='toolbar-button actionButton' @click.prevent='killGame'>Kill Game</a>
     </div>
     <cells-template-bar />
-    <canvas id='boardCanvas' class='noselect' @click.left.prevent='addCell' @dragover.prevent @drop="receivedDroppedElement"></canvas>
+    <div class = 'canvasContainer'>
+      <canvas id='boardCanvas' class='noselect' @click.left.prevent='addCell' @dragover.prevent @drop="receivedDroppedElement"></canvas>
+    </div>
   </div>
 </template>
 
@@ -188,10 +190,19 @@ export default {
 <style scoped>
 
 #boardCanvas {
-  border: 1px solid black;
 }
 
-.conwaysGamePlaceholder {
+.canvasContainer {
+  position: relative;
   overflow: auto;
+  margin: 0px;
+  padding: 0px;
+  background-color: #3fb67b;
+  height: 400px;
+}
+
+#boardCanvas {
+  /* border: 1px solid black; */
+  background-color: white;
 }
 </style>

@@ -55,9 +55,11 @@ export default {
     events: {
       error (err) {
         console.log('Websocket error!', JSON.stringify(err))
+        this.$toast('Can I really have everybody`s attention?')
       },
       appException (err) {
         console.log(JSON.stringify(err))
+        this.$toast('Can I have everybody`s attention?')
       },
       signedUp (data) {
         console.log('SignedUp user data received: ', JSON.stringify(data))

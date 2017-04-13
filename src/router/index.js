@@ -8,7 +8,9 @@ import UserProfile from '@/components/UserProfile'
 import ConwaysGamePlaceholder from '@/components/ConwaysGamePlaceholder'
 import ConwaysGameStorage from '@/plugins/cgStorage'
 import Vuelidate from 'vuelidate'
+import Toast from 'vue-easy-toast'
 
+Vue.use(Toast)
 Vue.use(Vuelidate)
 Vue.use(ConwaysGameStorage)
 Vue.use(Router)

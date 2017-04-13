@@ -3,7 +3,7 @@
     <div id="fake-nav">
       <a @click.prevent='toggleCreateGameModal'>Create a new game</a>
       <create-game-modal v-if='showCreateGameModal' v-on:accepted='createGame' v-on:cancel='toggleCreateGameModal'/>
-      <join-game-modal v-if='showJoinGameModal' v-on:accepted='joinGame' v-on:cancel='toggleJoinGameModal'/>
+      <join-game-modal v-if='gameDescriptorSelected' v-on:accepted='joinGame' v-on:cancel='toggleJoinGameModal'/>
     </div>
 
     <div id="available-games-toolbar">
@@ -24,7 +24,7 @@
           <td>{{gameDescriptor.ownerId}}</td>
           <td>{{gameDescriptor.users.length}}</td>
           <td>
-            <a class='game-selection-item-button actionButton' @click.prevent='joinGame(gameDescriptor)'>Join game</a>
+            <a class='game-selection-item-button actionButton' @click.prevent='gameDescriptorSelected = gameDescriptor'>Join game</a>
           </td>
         </tr>
       </template>
@@ -35,18 +35,20 @@
 <script>
 
 import CreateGameModal from './modal/CreateGameModal.vue'
+import JoinGameModal from './modal/JoinGameModal.vue'
 
 export default {
   name: 'available-games-page',
   components: {
-    CreateGameModal
+    CreateGameModal,
+    JoinGameModal
   },
   methods: {
     toggleCreateGameModal: function () {
       this.$data.showCreateGameModal = !this.$data.showCreateGameModal
     },
     toggleJoinGameModal: function () {
-      this.$data.showJoinGameModal = !this.$data.showJoinGameModal
+      this.$data.gameDescriptorSelected = null
     },
     createGame: function (newGameSubComponentData) {
       this.toggleCreateGameModal()
@@ -67,14 +69,16 @@ export default {
     saveDataIntoLocalStorage: function (gameData) {
       this.cgStorage.saveGameData(gameData)
     },
-    joinGame: function (gameDescriptor) {
+    joinGame: function (joinGameSubComponentData) {
       let data = {
-        game: gameDescriptor,
+        game: this.$data.gameDescriptorSelected,
         user: {
-          id: this.cgStorage.readLocalUserData().id
+          id: this.cgStorage.readLocalUserData().id,
+          color: joinGameSubComponentData.color.hex.substr(1)
         }
       }
 
+      this.toggleJoinGameModal()
       this.$socket.emit('joinGame', data)
     },
     refreshAvailableGamesList: function () {
@@ -110,7 +114,7 @@ export default {
   data () {
     return {
       showCreateGameModal: false,
-      showJoinGameModal: false,
+      gameDescriptorSelected: null,
       gameList: []
     }
   },

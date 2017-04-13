@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { required, minLength, between } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators'
 import { Chrome } from 'vue-color'
 import GenericModal from './GenericModal.vue'
 
