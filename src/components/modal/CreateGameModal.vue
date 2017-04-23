@@ -1,39 +1,39 @@
 <template>
   <generic-modal v-on:modalBackgroundClicked='cancel'>
-    <h2 slot='header'>Create Game</h2>
+    <h2 slot='header'>{{ $t("label.createGameModal.title") }}</h2>
 
     <div slot="body">
 
       <div class="form-group" v-bind:class="{ 'form-group--error': $v.name.$error }">
-        <label class="form__label">Name</label>
+        <label class="form__label">{{ $t("label.name") }}</label>
         <input class="form__input" v-model.trim="name" @input="$v.name.$touch()">
       </div>
-      <span class="form-group__message" v-if="!$v.name.required">Field is required</span>
-      <span class="form-group__message" v-if="!$v.name.minLength">Name must have at least {{$v.name.$params.minLength.min}} letters.</span>
-      
+      <span class="form-group__message" v-if="!$v.name.required">{{ $t("validation.fieldRequired", {element: $t("label.name")}) }}</span>
+      <span class="form-group__message" v-if="!$v.name.minLength">{{ $t("validation.elementAtLeast", {characterCount: $v.name.$params.minLength.min}) }}</span>
+
       <div class="form-group" v-bind:class="{ 'form-group--error': $v.refreshInterval.$error }">
-        <label class="form__label">Refresh Interval (in milliseconds)</label>
+        <label class="form__label">{{ $t("label.createGameModal.refreshInterval") }}</label>
         <input class="form__input" v-model="refreshInterval" @input="$v.refreshInterval.$touch()">
       </div>
-      <span class="form-group__message" v-if="!$v.refreshInterval.between">Must be between {{$v.refreshInterval.$params.between.min}} and {{$v.refreshInterval.$params.between.max}}</span>
+      <span class="form-group__message" v-if="!$v.refreshInterval.between">{{ $t("validation.elementBetween", {min: $v.refreshInterval.$params.between.min, max: $v.refreshInterval.$params.between.max}) }}</span>
 
       <div class="form-group" v-bind:class="{ 'form-group--error': $v.resolution.$error }">
-        <label class="form__label">Grid resolution (in pixels)</label>
+        <label class="form__label">{{ $t("label.createGameModal.gridResolution") }}</label>
         <input class="form__input" v-model="resolution" @input="$v.resolution.$touch()">
       </div>
-      <span class="form-group__message" v-if="!$v.resolution.between">Must be between {{$v.resolution.$params.between.min}} and {{$v.resolution.$params.between.max}}</span>
+      <span class="form-group__message" v-if="!$v.resolution.between">{{ $t("validation.elementBetween", { min: $v.resolution.$params.between.min, max: $v.resolution.$params.between.max}) }}</span>
 
       <div class="form-group" v-bind:class="{ 'form-group--error': $v.color.$error }">
-        <label class="form__label">User Color</label>
+        <label class="form__label">{{ $t("label.userColor") }}</label>
         <color-picker v-model="color" @change-color="onChangeColor"/>
       </div>
-      <span class="form-group__message" v-if="!$v.color.required">Field is required</span>
+      <span class="form-group__message" v-if="!$v.color.required">{{ $t("validation.fieldRequired") }}</span>
 
     </div>
 
     <div slot="footer" class="noselect">
-      <a class='modal-default-button actionButton' @click.prevent='cancel'>Cancel</a>
-      <a class='modal-default-button actionButton' @click.prevent='propagateData'>Create it!</a>
+      <a class='modal-default-button actionButton' @click.prevent='cancel'>{{ $t("label.cancel") }}</a>
+      <a class='modal-default-button actionButton' @click.prevent='propagateData'>{{ $t("label.createGameModal.createIt") }}</a>
     </div>
   </generic-modal>
 </template>

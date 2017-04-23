@@ -2,15 +2,15 @@
   <div class='users-page'>
 
     <div id="users-toolbar">
-      <a class='users-toolbar-action actionButton' @click.prevent='refreshUsersList'>Refresh list</a>
+      <a class='users-toolbar-action actionButton' @click.prevent='refreshUsersList'>{{ $t("label.refreshList") }}</a>
     </div>
 
     <table class='users-table noselect' draggable='false'>
       <tr class='users-header noselect'>
-        <th>User Name</th>
-        <th>Profile Creation Date</th> 
-        <th>Id</th>
-        <th>Email</th>
+        <th>{{ $t('usersProfiles.userName') }}</th>
+        <th>{{ $t('usersProfiles.creationDate') }}</th>
+        <th>{{ $t('label.ID') }}</th>
+        <th>{{ $t('label.email') }}</th>
       </tr>
       <template v-for="(userDescriptor, key, index) in list">
         <tr class='user-item' :class="{'unevenItem': key % 2 === 0}" draggable='false'>

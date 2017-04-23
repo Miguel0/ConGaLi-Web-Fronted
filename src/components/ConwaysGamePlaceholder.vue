@@ -1,9 +1,9 @@
 <template>
   <div class='conwaysGamePlaceholder'>
     <div id="fake-nav" class='toolbar'>
-      <a class='toolbar-button actionButton' @click.prevent='startGame'>Start Game</a>
-      <a class='toolbar-button actionButton' @click.prevent='pauseGame'>Pause Game</a>
-      <a class='toolbar-button actionButton' @click.prevent='killGame'>Kill Game</a>
+      <a class='toolbar-button actionButton' @click.prevent='startGame'>{{ $t("conwaysGamePlaceHolder.startGame") }}</a>
+      <a class='toolbar-button actionButton' @click.prevent='pauseGame'>{{ $t("conwaysGamePlaceHolder.pauseGame") }}</a>
+      <a class='toolbar-button actionButton' @click.prevent='killGame'>{{ $t("conwaysGamePlaceHolder.killGame") }}</a>
     </div>
     <cells-template-bar />
     <div class = 'canvasContainer'>

@@ -1,21 +1,21 @@
 <template>
   <div class='available-games-page'>
     <div id="fake-nav">
-      <a @click.prevent='toggleCreateGameModal'>Create a new game</a>
+      <a @click.prevent='toggleCreateGameModal'>{{ $t("availableGames.createGame") }}</a>
       <create-game-modal v-if='showCreateGameModal' v-on:accepted='createGame' v-on:cancel='toggleCreateGameModal'/>
       <join-game-modal v-if='gameDescriptorSelected' v-on:accepted='joinGame' v-on:cancel='toggleJoinGameModal'/>
     </div>
 
     <div id="available-games-toolbar">
-      <a class='available-games-toolbar-action actionButton' @click.prevent='refreshAvailableGamesList'>Refresh list</a>
+      <a class='available-games-toolbar-action actionButton' @click.prevent='refreshAvailableGamesList'>{{ $t("label.refreshList") }}</a>
     </div>
 
     <table class='game-selection-table noselect' draggable='false'>
       <tr class='game-selection-header noselect'>
-        <th>Game Name</th>
-        <th>Creation Date</th> 
-        <th>Owner Id</th>
-        <th>Users connected</th>
+        <th>{{ $t("availableGames.gameName") }}</th>
+        <th>{{ $t("label.creationDate") }}</th>
+        <th>{{ $t("availableGames.ownerId") }}</th>
+        <th>{{ $t("availableGames.usersConnected") }}</th>
       </tr>
       <template v-for="(gameDescriptor, key, index) in gameList">
         <tr class='game-selection-item' :class="{'unevenItem': key % 2 === 0}" draggable='false'>
@@ -24,7 +24,7 @@
           <td>{{gameDescriptor.ownerId}}</td>
           <td>{{gameDescriptor.users.length}}</td>
           <td>
-            <a class='game-selection-item-button actionButton' @click.prevent='gameDescriptorSelected = gameDescriptor'>Join game</a>
+            <a class='game-selection-item-button actionButton' @click.prevent='gameDescriptorSelected = gameDescriptor'>{{ $t("label.join") }}</a>
           </td>
         </tr>
       </template>

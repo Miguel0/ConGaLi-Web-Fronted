@@ -1,20 +1,20 @@
 <template>
   <generic-modal v-on:modalBackgroundClicked='cancel'>
-    <h2 slot='header'>Join Game</h2>
+    <h2 slot='header'>{{ $t("label.joinGameModal.joinGame") }}</h2>
 
     <div slot="body">
 
       <div class="form-group" v-bind:class="{ 'form-group--error': $v.color.$error }">
-        <label class="form__label">User Color</label>
+        <label class="form__label">{{ $t("label.userColor") }}</label>
         <color-picker v-model="color" @change-color="onChangeColor"/>
       </div>
-      <span class="form-group__message" v-if="!$v.color.required">Field is required</span>
+      <span class="form-group__message" v-if="!$v.color.required">{{ $t("validation.fieldRequired") }}</span>
 
     </div>
 
     <div slot="footer" class="noselect">
-      <a class='modal-default-button actionButton' @click.prevent='cancel'>Cancel</a>
-      <a class='modal-default-button actionButton' @click.prevent='propagateData'>Join it!</a>
+      <a class='modal-default-button actionButton' @click.prevent='cancel'>{{ $t("label.cancel") }}</a>
+      <a class='modal-default-button actionButton' @click.prevent='propagateData'>{{ $t("label.joinIt") }}</a>
     </div>
   </generic-modal>
 </template>

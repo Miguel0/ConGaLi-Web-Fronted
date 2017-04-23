@@ -1,16 +1,21 @@
 <template>
   <div id="app">
     <img class="mainLogo" src="./assets/logo.png">
+    <label for="locale">locale</label>
+    <select v-model="locale">
+      <option>en</option>
+      <option>es</option>
+    </select>
     <session-manager-modal v-if='showSessionManagerModal || !cgStorage.isAuthenticated()' v-on:cancel='toggleSessionModalActive' v-on:forgotPassword='forgotPassword' v-on:signUp='signUp' v-on:logIn='logIn' />
     <nav class="navbar navbar-default">
       <div class="container">
         <ul class="nav navbar-nav">
-          <li><router-link class="actionButton" to="/">Home</router-link></li>
-          <li><router-link class="actionButton" to="/game">Available Games</router-link></li>
-          <li v-if="cgStorage.isAuthenticated()"><a class="actionButton noselect" @click.prevent="logOut">logOut</a></li>
-          <li v-else><router-link class="actionButton" to="/logIn">logIn</router-link></li>
+          <li><router-link class="actionButton" to="/">{{ $t("landingPage.title") }}</router-link></li>
+          <li><router-link class="actionButton" to="/game">{{ $t("availableGames.title") }}</router-link></li>
+          <li v-if="cgStorage.isAuthenticated()"><a class="actionButton noselect" @click.prevent="logOut">{{ $t("label.logOut") }}</a></li>
+          <li v-else><router-link class="actionButton" to="/logIn">{{ $t("label.logIn") }}</router-link></li>
         </ul>
-      </div>    
+      </div>
     </nav>
     <router-view>
     </router-view>
@@ -88,7 +93,13 @@ export default {
   },
   data () {
     return {
-      showSessionManagerModal: this.showSessionModal
+      showSessionManagerModal: this.showSessionModal,
+      locale: 'es'
+    }
+  },
+  watch: {
+    locale (val) {
+      this.$i18n.locale = val
     }
   }
 }
@@ -115,7 +126,7 @@ ol {
 }
 
 ul {
-  list-style-type: none; 
+  list-style-type: none;
   padding: 0;
 }
 

@@ -6,40 +6,40 @@
 
       <ul class="form-switcher">
         <li @click.prevent="isForLogIn = false">
-          <a class="noselect" :class="{'active': !isForLogIn}" href="" id="login-form">Login</a>
+          <a class="noselect" :class="{'active': !isForLogIn}" href="" id="login-form">{{ $t("label.logIn") }}</a>
         </li>
         <li class="noselect" @click.prevent="isForLogIn = true">
-          <a :class="{'active': isForLogIn}" href="" id="register-form">Register</a>
+          <a :class="{'active': isForLogIn}" href="" id="register-form">{{ $t("label.register") }}</a>
         </li>
       </ul>
 
       <div class="form-group" :class="{ 'form-group--error': $v.userData.user.$error }">
-        <label class="form__label">User</label>
+        <label class="form__label">{{ $t("label.user") }}</label>
         <input class="form__input" v-model="userData.user" @input="$v.userData.user.$touch()">
       </div>
-      <span class="form-group__message" v-if="!$v.userData.user.between">User must have at least {{$v.userData.user.$params.minLength.min}} letters.</span>
-      
+      <span class="form-group__message" v-if="!$v.userData.user.between">{{ $t("validation.atLeast", {characterCount: $v.userData.user.$params.minLength.min}) }}</span>
+
       <div v-if='isForLogIn' class="form-group" :class="{ 'form-group--error': $v.userData.email.$error }">
-        <label class="form__label">Email</label>
+        <label class="form__label">{{ $t("label.email") }}</label>
         <input class="form__input" type="email" v-model="userData.email" @input="$v.userData.email.$touch()">
       </div>
-      <span class="form-group__message" v-if="!$v.userData.email.between">Email must have a valid formand and at least {{$v.userData.email.$params.minLength.min}} letters.</span>
-      
+      <span class="form-group__message" v-if="!$v.userData.email.between">{{ $t("validation.validFormatAtLeast", {characterCount: $v.userData.email.$params.minLength.min}) }}</span>
+
       <div class="form-group" :class="{ 'form-group--error': $v.userData.password.$error }">
-        <label class="form__label">Password</label>
+        <label class="form__label">{{ $t("label.password") }}</label>
         <input class="form__input" type="password" v-model="userData.password" @input="$v.userData.password.$touch()">
       </div>
-      <span class="form-group__message" v-if="!$v.userData.password.between">Password must have at least {{$v.userData.password.$params.minLength.min}} letters.</span>
+      <span class="form-group__message" v-if="!$v.userData.password.between">{{ $t("validation.atLeast", {characterCount: $v.userData.password.$params.minLength.min}) }}</span>
     </div>
 
     <div slot="footer" class="noselect">
-      <a class='modal-default-button actionButton' @click.prevent='cancel'>Cancel</a>
-      <a v-if="isForLogIn" class='modal-default-button actionButton' @click.prevent='propagateSignUp'>SignUp</a>
-      <a v-else class='modal-default-button actionButton' @click.prevent='propagateLogIn'>LogIn</a>
+      <a class='modal-default-button actionButton' @click.prevent='cancel'>{{ $t("label.cancel") }}</a>
+      <a v-if="isForLogIn" class='modal-default-button actionButton' @click.prevent='propagateSignUp'>{{ $t("label.signUp") }}</a>
+      <a v-else class='modal-default-button actionButton' @click.prevent='propagateLogIn'>{{ $t("label.logIn") }}</a>
 
       <div class="links">
-          <a v-if="isForLogIn" href="" @click="propagateForgotPassword">Forgot your password?</a>
-          <a v-else href="" @click="isForLogIn = true">Already have an account?</a>
+          <a v-if="isForLogIn" href="" @click="propagateForgotPassword">{{ $t("sessionModal.forgotYourPassword") }}</a>
+          <a v-else href="" @click="isForLogIn = true">{{ $t("sessionModal.alreadyHaveAccount") }}</a>
       </div>
     </div>
   </generic-modal>
