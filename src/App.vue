@@ -63,8 +63,8 @@ export default {
         this.$toast('Can I really have everybody`s attention?')
       },
       appException (err) {
-        console.log(JSON.stringify(err))
-        this.$toast('Can I have everybody`s attention?')
+        console.log('Application error!', JSON.stringify(err))
+        this.$toast(`<h4>${err.titleKey}</h4><p>${err.bodyKey}</p>`)
       },
       signedUp (data) {
         console.log('SignedUp user data received: ', JSON.stringify(data))

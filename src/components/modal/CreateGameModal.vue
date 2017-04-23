@@ -1,6 +1,6 @@
 <template>
   <generic-modal v-on:modalBackgroundClicked='cancel'>
-    <h2 slot='header'>{{ $t("label.createGameModal.title") }}</h2>
+    <h2 slot='header'>{{ $t("createGameModal.title") }}</h2>
 
     <div slot="body">
 
@@ -12,13 +12,13 @@
       <span class="form-group__message" v-if="!$v.name.minLength">{{ $t("validation.elementAtLeast", {characterCount: $v.name.$params.minLength.min}) }}</span>
 
       <div class="form-group" v-bind:class="{ 'form-group--error': $v.refreshInterval.$error }">
-        <label class="form__label">{{ $t("label.createGameModal.refreshInterval") }}</label>
+        <label class="form__label">{{ $t("createGameModal.refreshInterval") }}</label>
         <input class="form__input" v-model="refreshInterval" @input="$v.refreshInterval.$touch()">
       </div>
       <span class="form-group__message" v-if="!$v.refreshInterval.between">{{ $t("validation.elementBetween", {min: $v.refreshInterval.$params.between.min, max: $v.refreshInterval.$params.between.max}) }}</span>
 
       <div class="form-group" v-bind:class="{ 'form-group--error': $v.resolution.$error }">
-        <label class="form__label">{{ $t("label.createGameModal.gridResolution") }}</label>
+        <label class="form__label">{{ $t("createGameModal.gridResolution") }}</label>
         <input class="form__input" v-model="resolution" @input="$v.resolution.$touch()">
       </div>
       <span class="form-group__message" v-if="!$v.resolution.between">{{ $t("validation.elementBetween", { min: $v.resolution.$params.between.min, max: $v.resolution.$params.between.max}) }}</span>
@@ -33,7 +33,7 @@
 
     <div slot="footer" class="noselect">
       <a class='modal-default-button actionButton' @click.prevent='cancel'>{{ $t("label.cancel") }}</a>
-      <a class='modal-default-button actionButton' @click.prevent='propagateData'>{{ $t("label.createGameModal.createIt") }}</a>
+      <a class='modal-default-button actionButton' @click.prevent='propagateData'>{{ $t("createGameModal.createIt") }}</a>
     </div>
   </generic-modal>
 </template>
