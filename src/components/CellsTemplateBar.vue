@@ -2,16 +2,16 @@
   <div class='cells-template-bar'>
     <ul class='group-selection-bar noselect'>
       <template v-for='(cellsTemplateGroup, key) in tabsDef'>
-        <li class='toolbar-button actionButton' v-bind:class="{ 'unactive': current !== cellsTemplateGroup }" @click.prevent ='selectTab(key)'>{{ $t("cellsTemplatesBar.templateGroup." + cellsTemplateGroup.title) }}</li>
+        <li class='toolbar-button actionButton' v-bind:class="{ 'unactive': current !== cellsTemplateGroup }" @click.prevent ='selectTab(key)'>{{ $t("cellsTemplatesBar.templateGroup." + cellsTemplateGroup.name.replace(/\s/g, "_").replace(/[()]/g, "")) }}</li>
       </template>
     </ul>
     <div class='groups-template-bar'>
       <template v-for="cellsTemplateGroup in tabsDef">
         <div class='group-template-container' v-show='current === cellsTemplateGroup'>
-          <template v-for="cellTemplate in cellsTemplateGroup.cellsTemplates">
+          <template v-for="cellTemplate in cellsTemplateGroup.templates">
             <div class='template-container' draggable='true' @dragstart='startTemplateDrag(cellTemplate, $event)'>
               <img :src="cellTemplate.imgSrc" />
-              <p>{{ $t("cellsTemplatesBar.template." + cellTemplate.name) }}</p>
+              <p>{{ $t("cellsTemplatesBar.template." + cellTemplate.name.replace(/\s/g, "_").replace(/[()]/g, "")) }}</p>
             </div>
           </template>
         </div>
@@ -24,6 +24,12 @@
 export default {
   name: 'cells-template-bar',
   methods: {
+    getGameOwnerId () {
+      return this.$route.params.userId
+    },
+    getGameId () {
+      return this.$route.params.gameId
+    },
     selectTab (key) {
       let tab = this.$data.tabsDef[key || 0]
       if (tab && tab !== this.$data.current) {
@@ -51,6 +57,12 @@ export default {
   },
   mounted () {
     this.selectTab()
+    this.$socket.emit('getTemplateCellsOptions', {
+      game: {
+        id: this.getGameId(),
+        ownerId: this.getGameOwnerId()
+      }
+    })
   }
 }
 </script>

@@ -9,19 +9,19 @@
         <input class="form__input" v-model.trim="name" @input="$v.name.$touch()">
       </div>
       <span class="form-group__message" v-if="!$v.name.required">{{ $t("validation.fieldRequired", {element: $t("label.name")}) }}</span>
-      <span class="form-group__message" v-if="!$v.name.minLength">{{ $t("validation.elementAtLeast", {characterCount: $v.name.$params.minLength.min}) }}</span>
+      <span class="form-group__message" v-if="!$v.name.minLength">{{ $t("validation.atLeast", {characterCount: $v.name.$params.minLength.min}) }}</span>
 
       <div class="form-group" v-bind:class="{ 'form-group--error': $v.refreshInterval.$error }">
         <label class="form__label">{{ $t("createGameModal.refreshInterval") }}</label>
         <input class="form__input" v-model="refreshInterval" @input="$v.refreshInterval.$touch()">
       </div>
-      <span class="form-group__message" v-if="!$v.refreshInterval.between">{{ $t("validation.elementBetween", {min: $v.refreshInterval.$params.between.min, max: $v.refreshInterval.$params.between.max}) }}</span>
+      <span class="form-group__message" v-if="!$v.refreshInterval.between">{{ $t("validation.between", {min: $v.refreshInterval.$params.between.min, max: $v.refreshInterval.$params.between.max}) }}</span>
 
       <div class="form-group" v-bind:class="{ 'form-group--error': $v.resolution.$error }">
         <label class="form__label">{{ $t("createGameModal.gridResolution") }}</label>
         <input class="form__input" v-model="resolution" @input="$v.resolution.$touch()">
       </div>
-      <span class="form-group__message" v-if="!$v.resolution.between">{{ $t("validation.elementBetween", { min: $v.resolution.$params.between.min, max: $v.resolution.$params.between.max}) }}</span>
+      <span class="form-group__message" v-if="!$v.resolution.between">{{ $t("validation.between", { min: $v.resolution.$params.between.min, max: $v.resolution.$params.between.max}) }}</span>
 
       <div class="form-group" v-bind:class="{ 'form-group--error': $v.color.$error }">
         <label class="form__label">{{ $t("label.userColor") }}</label>

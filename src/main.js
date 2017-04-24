@@ -44,6 +44,7 @@ const messages = {
       usersConnected: 'Users connected'
     },
     joinGameModal: {
+      title: 'Join Game',
       joinIt: 'Join it!'
     },
     sessionModal: {
@@ -58,11 +59,23 @@ const messages = {
     },
     cellsTemplatesBar: {
       template: {
-        block: 'Block',
-        beehive: 'Beehive'
+        Block: 'Block',
+        Beehive: 'Beehive',
+        Loaf: 'Loaf',
+        Boat: 'Boat',
+        Flower: 'Flower',
+        Blinker: 'Blinker',
+        Toad: 'Toad',
+        Beacon: 'Beacon',
+        Pulsar: 'Pulsar',
+        Pentadecathlon: 'Pentadecathlon',
+        Glider: 'Glider',
+        Lightweight_spaceship_LWSS: 'Lightweight spaceship (LWSS)'
       },
       templateGroup: {
-        oscillators: 'Oscillators'
+        Oscillators: 'Oscillators',
+        Spaceships: 'Spaceships',
+        Still_lifes: 'Still lifes'
       }
     },
     conwaysGamePlaceHolder: {
@@ -133,6 +146,7 @@ const messages = {
       usersConnected: 'Usuarios conectados'
     },
     joinGameModal: {
+      title: 'Unirse a juego',
       joinIt: 'Unirse!'
     },
     sessionModal: {
@@ -147,11 +161,23 @@ const messages = {
     },
     cellsTemplatesBar: {
       template: {
-        block: 'Bloque',
-        beehive: 'Colmena'
+        Block: 'Bloque',
+        Beehive: 'Colmena',
+        Loaf: 'Hogaza',
+        Boat: 'Bote',
+        Flower: 'Flor',
+        Blinker: 'Intermitente',
+        Toad: 'Sapo',
+        Beacon: 'Lámpara',
+        Pulsar: 'Pulsar',
+        Pentadecathlon: 'Pentadecatlón',
+        Glider: 'Deslizador',
+        Lightweight_spaceship_LWSS: 'Nave espacial liviana'
       },
       templateGroup: {
-        oscillators: 'Osciladores'
+        Oscillators: 'Osciladores',
+        Spaceships: 'Naves espaciales',
+        Still_lifes: 'Vidas estables'
       }
     },
     conwaysGamePlaceHolder: {

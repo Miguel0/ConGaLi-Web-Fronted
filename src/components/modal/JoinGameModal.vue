@@ -1,6 +1,6 @@
 <template>
   <generic-modal v-on:modalBackgroundClicked='cancel'>
-    <h2 slot='header'>{{ $t("label.joinGameModal.joinGame") }}</h2>
+    <h2 slot='header'>{{ $t("joinGameModal.title") }}</h2>
 
     <div slot="body">
 
@@ -14,7 +14,7 @@
 
     <div slot="footer" class="noselect">
       <a class='modal-default-button actionButton' @click.prevent='cancel'>{{ $t("label.cancel") }}</a>
-      <a class='modal-default-button actionButton' @click.prevent='propagateData'>{{ $t("label.joinIt") }}</a>
+      <a class='modal-default-button actionButton' @click.prevent='propagateData'>{{ $t("joinGameModal.joinIt") }}</a>
     </div>
   </generic-modal>
 </template>
