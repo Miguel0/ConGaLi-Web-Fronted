@@ -16,11 +16,12 @@
   "dependencies": {
     "vue": "^2.2.2",
     "vue-color": "^2.0.6",
-    "vue-easy-toast": "^0.2.6",
+    "vue-easy-toast": "1.0.1",
     "vue-i18n": "^6.0.0",
     "vue-router": "^2.2.0",
     "vue-websocket": "^0.2.2",
-    "vuelidate": "^0.3.1"
+    "vuelidate": "^0.3.1",
+    "vue-easy-toast": "^1.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

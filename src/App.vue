@@ -1,11 +1,13 @@
 <template>
   <div id="app">
+    <div id="topMiniBar">
+      <label for="locale">Locale</label>
+      <select v-model="locale">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+      </select>
+    </div>
     <img class="mainLogo" src="./assets/logo.png">
-    <label for="locale">locale</label>
-    <select v-model="locale">
-      <option>en</option>
-      <option>es</option>
-    </select>
     <session-manager-modal v-if='showSessionManagerModal || !cgStorage.isAuthenticated()' v-on:cancel='toggleSessionModalActive' v-on:forgotPassword='forgotPassword' v-on:signUp='signUp' v-on:logIn='logIn' />
     <nav class="navbar navbar-default">
       <div class="container">
@@ -64,7 +66,7 @@ export default {
       },
       appException (err) {
         console.log('Application error!', JSON.stringify(err))
-        this.$toast(`<h4>${err.titleKey}</h4><p>${err.bodyKey}</p>`)
+        this.$toast(`<h4>${err.titleKey}</h4><p>${err.bodyKey}</p>`, {mode: 'queve', className: 'et-alert'})
       },
       signedUp (data) {
         console.log('SignedUp user data received: ', JSON.stringify(data))
@@ -182,5 +184,9 @@ a {
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
+}
+
+#topMiniBar {
+  width: 100%;
 }
 </style>
