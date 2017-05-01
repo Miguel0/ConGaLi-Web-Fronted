@@ -1,21 +1,21 @@
 <template>
-  <div id="app">
-    <div id="topMiniBar">
-      <label for="locale">Locale</label>
-      <select v-model="locale">
-        <option value="en">English</option>
-        <option value="es">Español</option>
+  <div id='app'>
+    <div id='topMiniBar'>
+      <label for='locale'>Locale</label>
+      <select v-model='locale'>
+        <option value='en'>English</option>
+        <option value='es'>Español</option>
       </select>
     </div>
-    <img class="mainLogo" src="./assets/logo.png">
+    <img class='mainLogo' src='./assets/logo.png'>
     <session-manager-modal v-if='showSessionManagerModal || !cgStorage.isAuthenticated()' v-on:cancel='toggleSessionModalActive' v-on:forgotPassword='forgotPassword' v-on:signUp='signUp' v-on:logIn='logIn' />
-    <nav class="navbar navbar-default">
-      <div class="container">
-        <ul class="nav navbar-nav">
-          <li><router-link class="actionButton" to="/">{{ $t("landingPage.title") }}</router-link></li>
-          <li><router-link class="actionButton" to="/game">{{ $t("availableGames.title") }}</router-link></li>
-          <li v-if="cgStorage.isAuthenticated()"><a class="actionButton noselect" @click.prevent="logOut">{{ $t("label.logOut") }}</a></li>
-          <li v-else><router-link class="actionButton" to="/logIn">{{ $t("label.logIn") }}</router-link></li>
+    <nav class='navbar navbar-default'>
+      <div class='container'>
+        <ul class='nav navbar-nav'>
+          <li><router-link class='actionButton' to='/'>{{ $t('landingPage.title') }}</router-link></li>
+          <li><router-link class='actionButton' to='/game'>{{ $t('availableGames.title') }}</router-link></li>
+          <li v-if='cgStorage.isAuthenticated()'><a class='actionButton noselect' @click.prevent='logOut'>{{ $t('label.logOut') }}</a></li>
+          <li v-else><router-link class='actionButton' to='/logIn'>{{ $t('label.logIn') }}</router-link></li>
         </ul>
       </div>
     </nav>
@@ -60,9 +60,12 @@ export default {
   },
   socket: {
     events: {
-      error (err) {
-        console.log('Websocket error!', JSON.stringify(err))
-        this.$toast('Can I really have everybody`s attention?')
+      error (error) {
+        console.log('Websocket error!', JSON.stringify(error))
+        if (error.type === 'UnauthorizedError' || error.code === 'invalid_token') {
+          console.log('User\'s token has expired')
+          this.$router.push('/')
+        }
       },
       appException (err) {
         console.log('Application error!', JSON.stringify(err))
@@ -90,6 +93,15 @@ export default {
 
         this.$data.showSessionManagerModal = true
         this.$router.push('/')
+      },
+      authenticated () {
+        this.$socket.emit('authenticate', {token: Math.random()})
+      },
+      unauthorized (error) {
+        if (error.data.type === 'UnauthorizedError' || error.data.code === 'invalid_token') {
+          console.log('User\'s token has expired')
+          this.$router.push('/')
+        }
       }
     }
   },
@@ -110,7 +122,7 @@ export default {
 <style>
 #app {
   /* font-family: 'Avenir', Helvetica, Arial, sans-serif; */
-  font-family: "Merriweather", serif;
+  font-family: 'Merriweather', serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

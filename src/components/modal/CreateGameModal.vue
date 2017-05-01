@@ -33,7 +33,7 @@
 
     <div slot="footer" class="noselect">
       <a class='modal-default-button actionButton' @click.prevent='cancel'>{{ $t("label.cancel") }}</a>
-      <a class='modal-default-button actionButton' @click.prevent='propagateData'>{{ $t("createGameModal.createIt") }}</a>
+      <a class='modal-default-button actionButton' :class="{'inactive': $v.color.$invalid && $v.resolution.$invalid && $v.refreshInterval.$invalid && $v.name.$invalid}" @click.prevent='propagateData'>{{ $t("createGameModal.createIt") }}</a>
     </div>
   </generic-modal>
 </template>
@@ -89,4 +89,9 @@ export default {
 </script>
 
 <style scoped>
+
+.inactive {
+  color: #666666;
+  background-color: #dddddd;
+}
 </style>

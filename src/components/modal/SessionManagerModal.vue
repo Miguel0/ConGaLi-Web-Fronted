@@ -9,7 +9,7 @@
           <a class="noselect" :class="{'active': !isForLogIn}" href="" id="login-form">{{ $t("label.logIn") }}</a>
         </li>
         <li class="noselect" @click.prevent="isForLogIn = true">
-          <a :class="{'active': isForLogIn}" href="" id="register-form">{{ $t("label.register") }}</a>
+          <a class="noselect" :class="{'active': isForLogIn}" href="" id="register-form">{{ $t("label.register") }}</a>
         </li>
       </ul>
 
@@ -34,8 +34,8 @@
 
     <div slot="footer" class="noselect">
       <a class='modal-default-button actionButton' @click.prevent='cancel'>{{ $t("label.cancel") }}</a>
-      <a v-if="isForLogIn" class='modal-default-button actionButton' @click.prevent='propagateSignUp'>{{ $t("label.signUp") }}</a>
-      <a v-else class='modal-default-button actionButton' @click.prevent='propagateLogIn'>{{ $t("label.logIn") }}</a>
+      <a v-if="isForLogIn" class='modal-default-button actionButton' :class="{'inactive': $v.userData.user.$invalid || $v.userData.email.$invalid || $v.userData.password.$invalid}" @click.prevent='propagateSignUp'>{{ $t("label.signUp") }}</a>
+      <a v-else class='modal-default-button actionButton' :class="{'inactive': $v.userData.user.$invalid || $v.userData.password.$invalid}" @click.prevent='propagateLogIn'>{{ $t("label.logIn") }}</a>
 
       <div class="links">
           <a v-if="isForLogIn" href="" @click="propagateForgotPassword">{{ $t("sessionModal.forgotYourPassword") }}</a>
@@ -99,6 +99,12 @@ export default {
 </script>
 
 <style scoped>
+
+.inactive {
+  color: #666666;
+  background-color: #dddddd;
+}
+
 .custom-modal-body {
   margin-top: -3.35em;
   margin-left: -2em;
