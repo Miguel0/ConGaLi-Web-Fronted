@@ -44,10 +44,12 @@ export default {
     },
     signUp (userData) {
       this.$socket.emit('signUp', userData)
+      this.$socket.emit('authenticate', userData)
       console.log('Data sent: ' + JSON.stringify(userData))
     },
     logIn (userData) {
       this.$socket.emit('logIn', userData)
+      this.$socket.emit('authenticate', userData)
     },
     logOut () {
       if (confirm('Do you wan\'t to close your session?')) {
@@ -94,8 +96,13 @@ export default {
         this.$data.showSessionManagerModal = true
         this.$router.push('/')
       },
-      authenticated () {
-        this.$socket.emit('authenticate', {token: Math.random()})
+      authenticated (data) {
+        console.log('SignedUp user data received: ', JSON.stringify(data))
+
+        data.isAuthenticated = true
+        this.cgStorage.saveLocalUserData(data)
+        this.$data.showSessionManagerModal = false
+        this.$router.push('/game')
       },
       unauthorized (error) {
         if (error.data.type === 'UnauthorizedError' || error.data.code === 'invalid_token') {
