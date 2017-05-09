@@ -86,7 +86,7 @@
     "cross-spawn": "^5.0.1",
     "nightwatch": "^0.9.12",
     "selenium-server": "^3.0.1",
-    "opn": "^4.0.2",
+    "opn": "^4.0.2"
   },
   "engines": {
     "node": ">= 4.0.0",
