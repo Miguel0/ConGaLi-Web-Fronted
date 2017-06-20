@@ -115,7 +115,7 @@ export default {
   data () {
     return {
       showSessionManagerModal: this.showSessionModal,
-      locale: 'es'
+      locale: 'en'
     }
   },
   watch: {

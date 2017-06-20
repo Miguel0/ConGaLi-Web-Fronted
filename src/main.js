@@ -109,6 +109,36 @@ const messages = {
     usersProfiles: {
       userName: 'User Name',
       creationDate: 'Profile creation date'
+    },
+    error: {
+      game: {
+        invalidGameForUser: {
+          title: 'Invalid access',
+          body: 'The user doesn\'t have access to this game'
+        }
+      },
+      session: {
+        signUp: {
+          alreadyStarted: {
+            title: 'Session already started',
+            body: 'The user\'s session had already started'
+          }
+        },
+        logIn: {
+          wrongUserOrPassword: {
+            title: 'Wrong user or password',
+            body: 'The authentication data received is not correct'
+          },
+          alreadyOpen: {
+            title: 'Session already open',
+            body: 'The user\'s session is already open'
+          }
+        },
+        alreadyClosed: {
+          title: 'Session already closed',
+          body: 'The user\'s session is already closed'
+        }
+      }
     }
   },
   es: {
@@ -218,8 +248,8 @@ const messages = {
 Vue.use(VueI18n)
 
 const i18n = new VueI18n({
-  locale: 'es',
-  fallbackLocale: 'en',
+  locale: 'en',
+  fallbackLocale: 'es',
   messages
 })
 
