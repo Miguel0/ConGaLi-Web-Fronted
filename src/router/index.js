@@ -14,7 +14,7 @@ Vue.use(Toast)
 Vue.use(Vuelidate)
 Vue.use(ConwaysGameStorage)
 Vue.use(Router)
-Vue.use(VueWebsocket, 'ws://congali-backend-websocket.herokuapp.com:3000')
+Vue.use(VueWebsocket, 'ws://congali-backend-websocket.herokuapp.com:3000', {secure: true})
 
 const router = new Router({
   routes: [
