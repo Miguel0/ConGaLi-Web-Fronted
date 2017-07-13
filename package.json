@@ -6,10 +6,9 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "postinstall": "npm run build",
-    "start": "nf run npm run dev",
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
+    "deploy": "git subtree push --prefix dist heroku master",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
