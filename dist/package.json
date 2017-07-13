@@ -1,8 +1,8 @@
 {
-  "name": "blog",
-  "version": "1.0.0",
-  "description": "personalblog",
-  "author": "sagar jauhari",
+  "name": "ConGaLi-Web-Interface",
+  "version": "0.0.1",
+  "description": "",
+  "author": "Miguel Isasmendi",
   "private": true,
   "scripts": {
     "postinstall": "npm install express"
