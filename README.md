@@ -63,11 +63,11 @@ npm install
 # serve with hot reload at localhost:8080
 npm run dev
 
-# build for production with minification
-npm run build
+# run with production settings
+npm start
 
-# build for production and view the bundle analyzer report
-npm run build --report
+# build the server to deploy
+npm build
 
 # run unit tests
 npm run unit
@@ -75,9 +75,34 @@ npm run unit
 # run e2e tests
 npm run e2e
 
-# run all tests
+# runs the tests
 npm test
+
+# launchs the linter process
+npm lint
+
+# deploys the builded application to heroku
+npm deploy
 ```
+
+## &nbsp;<img src="https://github.com/miguel-isasmendi/ConGaLi-Backend-WebSocket/wiki/images/support.png" alt="Heroku configuration/setup" width="22px"> Heroku configuration/setup
+
+As a first approach to the build process we use Docker to develop in the local environment, so I had to modify the configuration to really be available on Heroku. And we will have to develop inside a container within Docker with the proper net configuration:
+
+The websocket server will be identified as congali-web-interface.herokuapp.com
+
+In Linux I've had to install node's port of foreman (https://github.com/strongloop/node-foreman) to avoid permissions issues by running "heroku local":
+
+_npm install -g foreman_
+
+and after that I was able to simulate the build running
+
+_rm -rf node_modules && npm install --quiet --production && nf start_
+
+To avoid the a dependecy error upon build process on heroku, I've changed the configuration to abide this guide (the downside of this approach is that you have to build manually prior to deploy the application, and I would like to have a more elegant and secure way to do the build in the server.)
+
+"_npm run build_"
+"_nf start_" if you have foreman or "_npm start_" if you don't.
 
 ##  &nbsp;<img src="https://github.com/miguel-isasmendi/ConGaLi-Backend-WebSocket/wiki/images/search.png" alt="Find out more" width="22px"> Find out more
 
