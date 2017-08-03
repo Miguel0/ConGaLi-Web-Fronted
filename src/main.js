@@ -86,7 +86,7 @@ const messages = {
     landingPage: {
       title: 'Home',
       text: {
-        innerTitle: "Conway's Web Game",
+        innerTitle: 'Conway\'s Web Game',
         innerSubTitle: 'This implementation is ment to be used with <a href="https://github.com/miguel-isasmendi/conwaysGame-Backend">Conway\'s Game Backend</a>.',
         innerOverallIntent: '<a href="https://en.wikipedia.org/wiki/Conway\'s_Game_of_Life">Conway’s Game of Life</a> is a famous simulation that demonstrates cellular automaton. It is modeled as a grid with 4 simple rules:',
         rules: [
@@ -112,9 +112,49 @@ const messages = {
     },
     error: {
       game: {
-        invalidGameForUser: {
-          title: 'Invalid access',
-          body: 'The user doesn\'t have access to this game'
+        users: {
+          invalidGameForUser: {
+            title: 'Invalid access',
+            body: 'The user doesn\'t have access to the game'
+          },
+          userAlreadyExists: {
+            title: 'The user is already in the game',
+            body: 'The user {user.name} is already in the game'
+          }
+        },
+        cellsGrid: {
+          canNotRemoveCellThatDoesNotExists: {
+            title: 'Cannot remove a cell that doesn\'t exist anymore',
+            body: 'Cannot remove a cell at {cellsConfig.x}@{cellsConfig.y} that doesn\'t exist anymore'
+          },
+          invalidResolution: {
+            title: 'Invalid resolution received',
+            body: 'The resolution should be an integer greater than zero, but instead is {receivedResolution}'
+          },
+          cellAtInvalidPosition: {
+            title: 'Invalid cell\'s position access',
+            body: 'Trying to access cell at invalid position {invalidPosition.x}@{invalidPosition.y}'
+          },
+          malformedColor: {
+            title: 'Malformed color definition received',
+            body: 'Some of the colors array received [{arguments}] are invalid'
+          },
+          cellCantBeOverride: {
+            title: 'Cannot override cell',
+            body: 'Cannot override cell at {cellsConfig.x}@{cellsConfig.y}'
+          }
+        },
+        save: {
+          alreadyExists: {
+            title: 'The game exists already',
+            body: 'Cannot save game that already exists'
+          }
+        },
+        gridTemplate: {
+          wrongCellsTemplate: {
+            title: 'Cells template doesn\'t exist',
+            body: 'Cells template doesn\'t exist'
+          }
         }
       },
       session: {
@@ -138,6 +178,26 @@ const messages = {
           title: 'Session already closed',
           body: 'The user\'s session is already closed'
         }
+      },
+      user: {
+        integrity: {
+          createdOn: {
+            title: 'Error on "createdOn" attribute\'s integrity',
+            body: 'The "createdOn" attribute should be a Date'
+          },
+          name: {
+            title: 'Error on "name" attribute\'s integrity',
+            body: 'The "name" attribute should be not empty'
+          },
+          password: {
+            title: 'Error on "password" attribute\'s integrity',
+            body: 'The "password" attribute should be not empty'
+          }
+        }
+      },
+      unexpectedError: {
+        title: 'Unexpected Error',
+        body: 'A unexpected error has happened. Please contact the application support'
       }
     }
   },
@@ -241,6 +301,96 @@ const messages = {
     usersProfiles: {
       userName: 'Nombre',
       creationDate: 'Fecha de creación'
+    },
+    error: {
+      game: {
+        users: {
+          invalidGameForUser: {
+            title: 'Acceso inválido',
+            body: 'El usuario no tien acceso al juego'
+          },
+          userAlreadyExists: {
+            title: 'El usuario ya está incluido en el juego',
+            body: 'El usuario "{user.name}" ya está incluido en el juego'
+          }
+        },
+        cellsGrid: {
+          canNotRemoveCellThatDoesNotExists: {
+            title: 'No se puede eliminar una celda que dejó de existir',
+            body: 'No se puede eliminar la celda en posición {cellsConfig.x}@{cellsConfig.y} porque no existe mas'
+          },
+          invalidResolution: {
+            title: 'Resolución invalida recibida',
+            body: 'La resolución debería ser un número entero mayor a cero, pero se recibió {receivedResolution}'
+          },
+          cellAtInvalidPosition: {
+            title: 'Acceso inválido a posición de celda',
+            body: 'Error tratando de acceder a posición inválida {invalidPosition.x}@{invalidPosition.y}'
+          },
+          malformedColor: {
+            title: 'Definición de color malformada recibida',
+            body: 'Alguno de los colores recibidos es inválido [{arguments}]'
+          },
+          cellCantBeOverride: {
+            title: 'No se puede sobreescribir celda',
+            body: 'No se puede sobreescribir celda en {cellsConfig.x}@{cellsConfig.y}'
+          }
+        },
+        save: {
+          alreadyExists: {
+            title: 'El juego ya existe',
+            body: 'No se puede grabar un juego que ya existe'
+          }
+        },
+        gridTemplate: {
+          wrongCellsTemplate: {
+            title: 'La plantilla de celdas no existe',
+            body: 'La plantilla de celdas no existe'
+          }
+        }
+      },
+      session: {
+        signUp: {
+          alreadyStarted: {
+            title: 'Session already started',
+            body: 'La sesión del usuario ya ha sido iniciada'
+          }
+        },
+        logIn: {
+          wrongUserOrPassword: {
+            title: 'Usuario o contraseña erronea',
+            body: 'La información de autenticación recibida no es correcta'
+          },
+          alreadyOpen: {
+            title: 'Sesión ya iniciada',
+            body: 'La sesión del usuario ya está iniciada'
+          }
+        },
+        alreadyClosed: {
+          title: 'Sesión ya cerrada',
+          body: 'La sesión del usuario fue cerrada'
+        }
+      },
+      user: {
+        integrity: {
+          createdOn: {
+            title: 'Error de integridad en el atributo "createdOn"',
+            body: 'El atributo "createdOn" debería ser una fecha válida'
+          },
+          name: {
+            title: 'Error de integridad en el atributo "name"',
+            body: 'El atributo "name" no debería estar vacía'
+          },
+          password: {
+            title: 'Error de integridad en el atributo "password"',
+            body: 'El atributo "password" no debería estar vacía'
+          }
+        }
+      },
+      unexpectedError: {
+        title: 'Excepción inesperada',
+        body: 'Un excepción inesperada ha sucedido. Por favor contacte al soporte de la aplicación'
+      }
     }
   }
 }
