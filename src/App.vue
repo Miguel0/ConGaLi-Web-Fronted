@@ -71,7 +71,8 @@ export default {
       },
       appException (err) {
         console.log('Application error!', JSON.stringify(err))
-        this.$toast(`<h4>${err.titleKey}</h4><p>${err.bodyKey}</p>`, {mode: 'queve', className: 'et-alert'})
+
+        this.$toast(this.ErrorBuilder.buildFor(err), {mode: 'queve', className: 'et-alert'})
       },
       signedUp (data) {
         console.log('SignedUp user data received: ', JSON.stringify(data))
