@@ -85,24 +85,18 @@ npm lint
 npm deploy
 ```
 
-## &nbsp;<img src="https://github.com/miguel-isasmendi/ConGaLi-Backend-WebSocket/wiki/images/support.png" alt="Heroku configuration/setup" width="22px"> Heroku configuration/setup
+## &nbsp;<img src="https://github.com/miguel-isasmendi/ConGaLi-Backend-WebSocket/wiki/images/Heroku.png" alt="Heroku configuration/setup" width="22px"> Heroku configuration/setup
 
-As a first approach to the build process we use Docker to develop in the local environment, so I had to modify the configuration to really be available on Heroku. And we will have to develop inside a container within Docker with the proper net configuration:
-
-The websocket server will be identified as congali-web-interface.herokuapp.com
-
-In Linux I've had to install node's port of foreman (https://github.com/strongloop/node-foreman) to avoid permissions issues by running "heroku local":
-
-_npm install -g foreman_
-
-and after that I was able to simulate the build running
-
-_rm -rf node_modules && npm install --quiet --production && nf start_
+The considerations wrote in the [Heroku configuration Backend's wiki page] remain, but with some differences, which I will describe next.
 
 To avoid the a dependecy error upon build process on heroku, I've changed the configuration to abide this guide (the downside of this approach is that you have to build manually prior to deploy the application, and I would like to have a more elegant and secure way to do the build in the server.)
 
 "_npm run build_"
-"_nf start_" if you have foreman or "_npm start_" if you don't.
+
+##  &nbsp;<img src="https://github.com/miguel-isasmendi/ConGaLi-Backend-WebSocket/wiki/images/game_controller.png" alt="How to play the game" width="22px"> How to play the game
+
+To play the game you can follow the instructions described on the [running the game WebSocket Backend's wiki page].
+
 
 ##  &nbsp;<img src="https://github.com/miguel-isasmendi/ConGaLi-Backend-WebSocket/wiki/images/search.png" alt="Find out more" width="22px"> Find out more
 
@@ -137,6 +131,10 @@ Check out the **[Talk to us]** page on our wiki.
 [setup-image]: https://github.com/miguel-isasmendi/ConGaLi-Backend-WebSocket/wiki/images/support.png
 [roadmap-image]: https://github.com/miguel-isasmendi/ConGaLi-Backend-WebSocket/wiki/images/adventure_map.png
 [contributing-image]: https://github.com/miguel-isasmendi/ConGaLi-Backend-WebSocket/wiki/images/helping_hand.png
+
+
+[Heroku configuration Backend's wiki page]: https://github.com/miguel-isasmendi/ConGaLi-Backend-WebSocket/wiki/Setting-up-ConGaLi#-heroku-configurationsetup
+[running the game WebSocket Backend's wiki page]: https://github.com/miguel-isasmendi/ConGaLi-Backend-WebSocket/wiki/Setting-up-ConGaLi#-running-the-game
 
 ***
 Icon pack by <a href="https://icons8.com" alt="Icons8"><img src="https://github.com/miguel-isasmendi/ConGaLi-Backend-WebSocket/wiki/images/Icons8.png" width="20px"></a>
