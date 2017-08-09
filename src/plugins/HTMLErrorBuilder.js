@@ -1,8 +1,24 @@
-const _cgStorage = sessionStorage || localStorage
-
 const HTMLErrorBuilder = function () {
   this.htmlTemplate = function (errorData) {
-    return `<h4>${errorData.titleKey}</h4><p>${errorData.createdOn}</p><p>${errorData.scope}</p><p>${errorData.level}</p><p>${errorData.bodyKey}</p>`
+    let htmlString = `<h4>${errorData.titleKey}</h4>`
+
+    if (errorData.bodyKey) {
+      htmlString += `<p>${errorData.bodyKey}</p>`
+    }
+
+    if (errorData.scope) {
+      htmlString += `<p>${errorData.scope}</p>`
+    }
+
+    if (errorData.level) {
+      htmlString += `<p>${errorData.level}</p>`
+    }
+
+    if (errorData.createdOn) {
+      htmlString += `<p style="font-size:smaller">createdOn: ${errorData.createdOn} UTC</p>`
+    }
+
+    return htmlString
   }
 
   this.extractPatternsFromString = function (regex, string) {
@@ -11,25 +27,25 @@ const HTMLErrorBuilder = function () {
 
     while ((m = regex.exec(string)) !== null) {
       if (m.index === regex.lastIndex) {
-          regex.lastIndex++;
+        regex.lastIndex++
       }
 
       m.forEach((match, groupIndex) => {
-        if (groupIndex == 1) {
+        if (groupIndex === 1) {
           patternMap[match] = match
         }
-      });
+      })
     }
 
     return Object.keys(patternMap)
   }
 
   this.searchValue = function (key, aJsonObject) {
-    let keysToRetrieve = key.slice(1,key.length - 1).split('.')
+    let keysToRetrieve = key.slice(1, key.length - 1).split('.')
     let value = aJsonObject
     let index = 0
 
-    while (index < keysToRetrieve.length && value != null && value != undefined) {
+    while (index < keysToRetrieve.length && value != null && value !== undefined) {
       value = value[keysToRetrieve[index]]
 
       index++
@@ -44,10 +60,10 @@ const HTMLErrorBuilder = function () {
     let receivedArgumentsData = errorData.arguments
 
     if (receivedArgumentsData) {
-      for (let i= 0 ; i < keysToReplace.length ; i++) {
+      for (let i = 0; i < keysToReplace.length; i++) {
         let valueRetrieved = this.searchValue(keysToReplace[i], receivedArgumentsData)
 
-        if (valueRetrieved != null && valueRetrieved != undefined) {
+        if (valueRetrieved !== null && valueRetrieved !== undefined) {
           errorData.bodyKey = errorData.bodyKey.replace(keysToReplace[i], valueRetrieved)
         }
       }

@@ -72,6 +72,10 @@ export default {
       appException (err) {
         console.log('Application error!', JSON.stringify(err))
 
+        err.bodyKey = this.$i18n.t(err.bodyKey)
+        err.titleKey = this.$i18n.t(err.titleKey)
+        console.log('Translated Application error!', JSON.stringify(err))
+
         this.$toast(this.ErrorBuilder.buildFor(err), {mode: 'queve', className: 'et-alert'})
       },
       signedUp (data) {

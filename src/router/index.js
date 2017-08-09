@@ -7,12 +7,14 @@ import UsersProfiles from '@/components/UsersProfiles'
 import UserProfile from '@/components/UserProfile'
 import ConwaysGamePlaceholder from '@/components/ConwaysGamePlaceholder'
 import ConwaysGameStorage from '@/plugins/cgStorage'
+import ConwaysErrorBuilder from '@/plugins/HTMLErrorBuilder'
 import Vuelidate from 'vuelidate'
 import Toast from 'vue-easy-toast'
 
 Vue.use(Toast)
 Vue.use(Vuelidate)
 Vue.use(ConwaysGameStorage)
+Vue.use(ConwaysErrorBuilder)
 Vue.use(Router)
 Vue.use(VueWebsocket, 'ws://congali-backend-websocket.herokuapp.com', {secure: true})
 
