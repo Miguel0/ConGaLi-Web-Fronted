@@ -16,7 +16,7 @@ Vue.use(Vuelidate)
 Vue.use(ConwaysGameStorage)
 Vue.use(ConwaysErrorBuilder)
 Vue.use(Router)
-Vue.use(VueWebsocket, 'ws://congali-backend-websocket.herokuapp.com', {secure: true})
+Vue.use(VueWebsocket, process.env.WS_BACKEND_URL, {secure: true})
 
 const router = new Router({
   routes: [
