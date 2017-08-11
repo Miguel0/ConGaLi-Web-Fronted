@@ -6,8 +6,8 @@
       <a class='toolbar-button actionButton' @click.prevent='killGame'>{{ $t("conwaysGamePlaceHolder.killGame") }}</a>
     </div>
     <cells-template-bar />
-    <div class = 'canvasContainer'>
-      <canvas id='boardCanvas' class='noselect' @click.left.prevent='addCell' @dragover.prevent @drop="receivedDroppedElement"></canvas>
+    <div class = 'canvasContainer' @scroll='syncCanvasData'>
+      <canvas id='boardCanvas' class='noselect' @click.left.prevent='addCell' @dragover.prevent @drop='receivedDroppedElement'></canvas>
     </div>
   </div>
 </template>
@@ -33,10 +33,12 @@ export default {
         canvas: canvas,
         cells: {}
       }
-
-      canvasUtils.syncCanvasData(canvasData, document)
-
       this.$data.canvasDataObject[elementId] = canvasData
+      this.syncCanvasData()
+    },
+    syncCanvasData () {
+      let canvasData = this.getCanvasData('boardCanvas')
+      canvasUtils.syncCanvasData(canvasData, document)
     },
     getGameOwnerId () {
       return this.$route.params.userId

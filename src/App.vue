@@ -9,12 +9,13 @@
     </div>
     <img class='mainLogo' src='./assets/logo.png'>
     <session-manager-modal v-if='showSessionManagerModal || !cgStorage.isAuthenticated()' v-on:cancel='toggleSessionModalActive' v-on:forgotPassword='forgotPassword' v-on:signUp='signUp' v-on:logIn='logIn' />
+    <logout-modal v-if='showLogoutModal' v-on:cancel='toggleLogoutModalActive' v-on:confirmed='logOut' />
     <nav class='navbar navbar-default'>
       <div class='container'>
         <ul class='nav navbar-nav'>
           <li><router-link class='actionButton' to='/'>{{ $t('landingPage.title') }}</router-link></li>
           <li><router-link class='actionButton' to='/game'>{{ $t('availableGames.title') }}</router-link></li>
-          <li v-if='cgStorage.isAuthenticated()'><a class='actionButton noselect' @click.prevent='logOut'>{{ $t('label.logOut') }}</a></li>
+          <li v-if='cgStorage.isAuthenticated()'><a class='actionButton noselect' @click.prevent='toggleLogoutModalActive'>{{ $t('label.logOut') }}</a></li>
           <li v-else><router-link class='actionButton' to='/logIn'>{{ $t('label.logIn') }}</router-link></li>
         </ul>
       </div>
@@ -27,17 +28,15 @@
 <script>
 
 import SessionManagerModal from './components/modal/SessionManagerModal'
+import LogoutModal from './components/modal/LogoutModal'
 
 export default {
   name: 'app',
   components: {
-    'session-manager-modal': SessionManagerModal
+    'session-manager-modal': SessionManagerModal,
+    'logout-modal': LogoutModal
   },
   props: {
-    'showSessionModal': {
-      type: Boolean,
-      default: false
-    }
   },
   methods: {
     forgotPassword (userData) {
@@ -52,12 +51,13 @@ export default {
       this.$socket.emit('authenticate', userData)
     },
     logOut () {
-      if (confirm('Do you wan\'t to close your session?')) {
-        this.$socket.emit('logOut')
-      }
+      this.$socket.emit('logOut')
     },
     toggleSessionModalActive () {
       this.$data.showSessionManagerModal = !this.$data.showSessionManagerModal
+    },
+    toggleLogoutModalActive () {
+      this.$data.showLogoutModal = !this.$data.showLogoutModal
     }
   },
   socket: {
@@ -95,11 +95,12 @@ export default {
         this.$router.push('/game')
       },
       loggedOut (data) {
+        console.log('server LoggedOut!')
         this.cgStorage.saveAppData()
-        console.log('LoggedOut!')
-
         this.$data.showSessionManagerModal = true
+        this.$data.showLogoutModal = false
         this.$router.push('/')
+        console.log('client LoggedOut!')
       },
       authenticated (data) {
         console.log('SignedUp user data received: ', JSON.stringify(data))
@@ -120,6 +121,7 @@ export default {
   data () {
     return {
       showSessionManagerModal: this.showSessionModal,
+      showLogoutModal: this.showLogoutModal,
       locale: 'en'
     }
   },

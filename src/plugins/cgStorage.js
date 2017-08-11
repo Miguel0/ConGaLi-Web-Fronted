@@ -73,7 +73,11 @@ const CGStorage = function () {
   }
 
   this.saveAppData = function (appData) {
-    _cgStorage['app'] = JSON.stringify(appData)
+    if (appData === null || appData === undefined) {
+      delete _cgStorage['app']
+    } else {
+      _cgStorage['app'] = JSON.stringify(appData)
+    }
 
     return appData
   }

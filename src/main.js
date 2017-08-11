@@ -47,6 +47,10 @@ const messages = {
       title: 'Join Game',
       joinIt: 'Join it!'
     },
+    logoutGameModal: {
+      title: 'Logout',
+      bodyText: 'Do you wan\'t to close your session?'
+    },
     sessionModal: {
       alreadyHaveAccount: 'Already have an account?',
       forgotYourPassword: 'Forgot your password?'
@@ -87,7 +91,7 @@ const messages = {
       title: 'Home',
       text: {
         innerTitle: 'Conway\'s Web Game',
-        innerSubTitle: 'This implementation is ment to be used with <a href="https://github.com/miguel-isasmendi/conwaysGame-Backend">Conway\'s Game Backend</a>.',
+        innerSubTitle: 'This implementation is ment to be used with <a href="https://github.com/miguel-isasmendi/ConGaLi-Backend-WebSocket">Conway\'s Game Backend</a>.',
         innerOverallIntent: '<a href="https://en.wikipedia.org/wiki/Conway\'s_Game_of_Life">Conway’s Game of Life</a> is a famous simulation that demonstrates cellular automaton. It is modeled as a grid with 4 simple rules:',
         rules: [
           'Any live cell with fewer than two live neighbours dies, as if caused by under-population.',
@@ -239,6 +243,10 @@ const messages = {
       title: 'Unirse a juego',
       joinIt: 'Unirse!'
     },
+    logoutGameModal: {
+      title: 'Cerrar sesión',
+      bodyText: '¿Quiere cerrar la sesión?'
+    },
     sessionModal: {
       alreadyHaveAccount: '¿Ya está registrado?',
       forgotYourPassword: '¿Olvido su contraseña?'
@@ -279,7 +287,7 @@ const messages = {
       title: 'Inicio',
       text: {
         innerTitle: 'Juego de Conway',
-        innerSubTitle: 'Esta implementación fue creada para utilizar con <a href="https://github.com/miguel-isasmendi/conwaysGame-Backend">Conway\'s Game Backend</a>.',
+        innerSubTitle: 'Esta implementación fue creada para utilizar con <a href="https://github.com/miguel-isasmendi/ConGaLi-Backend-WebSocket">Conway\'s Game Backend</a>.',
         innerOverallIntent: '<a href="https://en.wikipedia.org/wiki/Conway\'s_Game_of_Life">Conway’s Game of Life</a> es una simulación que demuestra el uso de autómatas celulares. Está modelado como una grilla con las siguientes reglas simples:',
         rules: [
           'Cualquier célula viva con menos de dos vecinas muere, debido a la baja población.',
@@ -352,7 +360,7 @@ const messages = {
       session: {
         signUp: {
           alreadyStarted: {
-            title: 'Session already started',
+            title: 'Sesión activa',
             body: 'La sesión del usuario ya ha sido iniciada'
           }
         },
