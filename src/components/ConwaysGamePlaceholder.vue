@@ -215,6 +215,19 @@ export default {
         console.log('Refreshing board with data: ' + JSON.stringify(data))
         this.drawBoard(data)
       },
+      ownershipChanged (gameData) {
+        console.log('Changing location of board with data: ' + JSON.stringify(gameData))
+
+        if (gameData.ownerId === this.getUserLocalData().id) {
+          this.cgStorage.saveOwnGameData(gameData)
+        } else {
+          this.cgStorage.saveAlienGameData(gameData)
+        }
+
+        this.cgStorage.deleteGameForUser(gameData.id, gameData.previousOwnerId)
+
+        this.$router.push(`/user/${gameData.ownerId}/game/${gameData.id}`)
+      },
       appException (err) {
         console.error(err)
       }

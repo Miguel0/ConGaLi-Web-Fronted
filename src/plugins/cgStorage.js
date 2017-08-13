@@ -5,6 +5,13 @@ const CGStorage = function () {
     return this.readUserData(userId).games[gameId]
   }
 
+  this.deleteGameForUser = function (gameId, userId) {
+    let userData = this.readUserData(userId)
+
+    delete userData.games[gameId]
+    return this.saveUserData(userId, userData)
+  }
+
   this.saveOwnGameData = function (gameData) {
     console.log(JSON.stringify(gameData))
     let userData = this.readLocalUserData()

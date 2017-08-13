@@ -191,6 +191,12 @@ const messages = {
         }
       },
       user: {
+        save: {
+          alreadyExists: {
+            title: 'The user already exists',
+            body: 'There is a user already created for the data received'
+          }
+        },
         integrity: {
           createdOn: {
             title: 'Error on "createdOn" attribute\'s integrity',
@@ -394,6 +400,12 @@ const messages = {
         }
       },
       user: {
+        save: {
+          alreadyExists: {
+            title: 'El usuario ingresado ya existe',
+            body: 'Ya existe un usuario que se corresponde a los datos ingresados'
+          }
+        },
         integrity: {
           createdOn: {
             title: 'Error de integridad en el atributo "createdOn"',
