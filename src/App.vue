@@ -43,15 +43,17 @@ export default {
     },
     signUp (userData) {
       this.$socket.emit('signUp', userData)
-      this.$socket.emit('authenticate', userData)
       console.log('Data sent: ' + JSON.stringify(userData))
     },
     logIn (userData) {
       this.$socket.emit('logIn', userData)
-      this.$socket.emit('authenticate', userData)
     },
     logOut () {
-      this.$socket.emit('logOut')
+      this.$socket.emit('logOut', {
+        user: {
+          id: this.cgStorage.readLocalUserData().id
+        }
+      })
     },
     toggleSessionModalActive () {
       this.$data.showSessionManagerModal = !this.$data.showSessionManagerModal
@@ -70,11 +72,11 @@ export default {
         }
       },
       appException (err) {
-        console.log('Application error!', JSON.stringify(err))
+        console.error('Application error:', JSON.stringify(err))
 
         err.bodyKey = this.$i18n.t(err.bodyKey)
         err.titleKey = this.$i18n.t(err.titleKey)
-        console.log('Translated Application error!', JSON.stringify(err))
+        console.error('Translated Application error:', JSON.stringify(err))
 
         this.$toast(this.ErrorBuilder.buildFor(err), {mode: 'queve', className: 'et-alert'})
       },
@@ -101,14 +103,6 @@ export default {
         this.$data.showLogoutModal = false
         this.$router.push('/')
         console.log('client LoggedOut!')
-      },
-      authenticated (data) {
-        console.log('SignedUp user data received: ', JSON.stringify(data))
-
-        data.isAuthenticated = true
-        this.cgStorage.saveLocalUserData(data)
-        this.$data.showSessionManagerModal = false
-        this.$router.push('/game')
       },
       unauthorized (error) {
         if (error.data.type === 'UnauthorizedError' || error.data.code === 'invalid_token') {
@@ -172,6 +166,7 @@ a {
   width: 8em;
   height: 8em;
 }
+
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */

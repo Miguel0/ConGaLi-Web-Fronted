@@ -34,7 +34,10 @@ const messages = {
       name: 'Name',
       creationDate: 'Creation date',
       join: 'Join',
-      ID: 'ID'
+      ID: 'ID',
+      game: {
+        id: 'Game ID'
+      }
     },
     availableGames: {
       title: 'Available Games',
@@ -49,7 +52,7 @@ const messages = {
     },
     logoutGameModal: {
       title: 'Logout',
-      bodyText: 'Do you wan\'t to close your session?'
+      bodyText: 'Do you confirm that you wan\'t to close your session? If so, those games that you own will be assigned to other players or, if not possible, closed.'
     },
     sessionModal: {
       alreadyHaveAccount: 'Already have an account?',
@@ -123,7 +126,11 @@ const messages = {
           },
           userAlreadyExists: {
             title: 'The user is already in the game',
-            body: 'The user {user.name} is already in the game'
+            body: 'The user {name} is already in the game'
+          },
+          userDoesntExists: {
+            title: 'The user isn\'t associated to the game',
+            body: 'The user {id} isn\'t associated to the game'
           }
         },
         cellsGrid: {
@@ -230,7 +237,10 @@ const messages = {
       name: 'Nombre',
       creationDate: 'Fecha de creación',
       join: 'Unirse',
-      ID: 'ID'
+      ID: 'ID',
+      game: {
+        id: 'ID de juego'
+      }
     },
     availableGames: {
       title: 'Juegos disponibles',
@@ -245,7 +255,7 @@ const messages = {
     },
     logoutGameModal: {
       title: 'Cerrar sesión',
-      bodyText: '¿Quiere cerrar la sesión?'
+      bodyText: '¿Confirma que desea cerrar la sesión? Los juegos de los cuales es ud. dueño serán asignados a otros jugadores o, de no ser posible, eliminados.'
     },
     sessionModal: {
       alreadyHaveAccount: '¿Ya está registrado?',
@@ -319,7 +329,11 @@ const messages = {
           },
           userAlreadyExists: {
             title: 'El usuario ya está incluido en el juego',
-            body: 'El usuario "{user.name}" ya está incluido en el juego'
+            body: 'El usuario "{id}" ya está incluido en el juego'
+          },
+          userDoesntExists: {
+            title: 'El usuario no está incluido en el juego',
+            body: 'El usuario "{id}" no está incluido en el juego'
           }
         },
         cellsGrid: {

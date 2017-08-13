@@ -5,23 +5,42 @@ const CGStorage = function () {
     return this.readUserData(userId).games[gameId]
   }
 
-  this.saveGameData = function (gameData) {
+  this.saveOwnGameData = function (gameData) {
     console.log(JSON.stringify(gameData))
-    let userData = this.readUserData(gameData.ownerId)
+    let userData = this.readLocalUserData()
 
     if (!userData) {
       userData = gameData.users[gameData.ownerId]
       userData.games = {}
     }
 
+    // This should throw exception, updates should have a different circuit
+    if (userData.games[gameData.id]) {
+      // TODO thrown or handle better this situation
+      throw new Error('should use update to save game again')
+    } else {
+      userData.games[gameData.id] = gameData
+      return this.saveUserData(gameData.ownerId, userData)
+    }
+  }
+
+  this.saveAlienGameData = function (gameData) {
+    console.log(JSON.stringify(gameData))
+    let userData = this.readUserData(gameData.ownerId)
+
+    // If we never subscribed to some game from this user, initializate record
+    if (!userData) {
+      let originalUserData = gameData.users[gameData.ownerId]
+      userData = {color: originalUserData.color, id: originalUserData.id, name: originalUserData.name}
+      userData.games = {}
+    }
+
+    // If we have already saved data for the game data received by argument..
     if (userData.games[gameData.id]) {
       // TODO thrown or handle better this situation
       throw new Error('game already exists')
     } else {
       userData.games[gameData.id] = gameData
-      gameData.users = []
-
-      console.log(JSON.stringify(userData))
       return this.saveUserData(gameData.ownerId, userData)
     }
   }
@@ -38,6 +57,8 @@ const CGStorage = function () {
     if (!userData.games) {
       userData.games = {}
     }
+
+    console.log(JSON.stringify(userData))
 
     return this.saveAppData(appData)
   }

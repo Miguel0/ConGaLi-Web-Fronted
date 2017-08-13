@@ -45,33 +45,38 @@ const HTMLErrorBuilder = function () {
     let value = aJsonObject
     let index = 0
 
-    while (index < keysToRetrieve.length && value != null && value !== undefined) {
+    while (index < keysToRetrieve.length && value !== null && value !== undefined) {
       value = value[keysToRetrieve[index]]
 
       index++
     }
 
+    if (value === null || value === undefined) {
+      console.warn(`Could not find data for key "${key}" on "${JSON.stringify(aJsonObject)}"`)
+    }
+
     return value
   }
 
-  this.replaceBodyKeyValues = function (regex, errorData) {
-    let keysToReplace = this.extractPatternsFromString(regex, errorData.bodyKey)
-
-    let receivedArgumentsData = errorData.arguments
+  this.replaceValues = function (regex, templateString, receivedArgumentsData) {
+    let stringToWorkOn = templateString
+    let keysToReplace = this.extractPatternsFromString(regex, stringToWorkOn)
 
     if (receivedArgumentsData) {
       for (let i = 0; i < keysToReplace.length; i++) {
         let valueRetrieved = this.searchValue(keysToReplace[i], receivedArgumentsData)
 
         if (valueRetrieved !== null && valueRetrieved !== undefined) {
-          errorData.bodyKey = errorData.bodyKey.replace(keysToReplace[i], valueRetrieved)
+          stringToWorkOn = stringToWorkOn.replace(keysToReplace[i], valueRetrieved)
         }
       }
     }
+    return stringToWorkOn
   }
 
   this.doBuild = function (errorData) {
-    this.replaceBodyKeyValues(/(?=({[\w.]+}).*)/g, errorData)
+    errorData.bodyKey = this.replaceValues(/(?=({[\w.]+}).*)/g, errorData.bodyKey, errorData.arguments)
+    errorData.titleKey = this.replaceValues(/(?=({[\w.]+}).*)/g, errorData.titleKey, errorData.arguments)
 
     return this.htmlTemplate(errorData)
   }

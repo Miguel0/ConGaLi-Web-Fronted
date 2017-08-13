@@ -1,9 +1,43 @@
 <template>
   <div class='conwaysGamePlaceholder'>
+    <div class = 'gamePlaceholderDataDescriptorContainer'>
+      <div class = 'userDataDescriptorContainer'>
+        <p>
+          <label class="descriptorLabel">{{ $t("label.user") }} id: </label>
+          <span class="descriptorValue">{{getUserLocalData().id}}</span>
+        </p>
+        <p>
+          <label class="descriptorLabel">{{ $t("label.name") }}: </label>
+          <span class="descriptorValue">"{{getUserLocalData().name}}"</span>
+        </p>
+        <p>
+          <label class="descriptorLabel">{{ $t("label.userColor") }}: </label>
+          <span class="descriptorValue colorContainer" v-bind:style="{ 'background-color': userColor }"></span>
+        </p>      
+      </div>
+      <div class = 'gameDataDescriptorContainer'>
+        <p>
+          <label class="descriptorLabel">{{ $t("availableGames.gameName") }}</label>
+          <span class="descriptorValue">{{ getGameData().name }}</span>
+        </p>
+        <p>
+          <label class="descriptorLabel">{{ $t("label.game.id") }}</label>
+          <span class="descriptorValue">{{ getGameData().id }}</span>
+        </p>
+        <p>
+          <label class="descriptorLabel">{{ $t("availableGames.ownerId") }}</label>
+          <span class="descriptorValue">{{ getGameData().ownerId }}</span>
+        </p>
+        <p>
+          <label class="descriptorLabel">{{ $t("label.creationDate") }}</label>
+          <span class="descriptorValue">{{ getGameData().createdOn }}</span>
+        </p>
+      </div>
+    </div>
     <div id="fake-nav" class='toolbar'>
       <a class='toolbar-button actionButton' @click.prevent='startGame'>{{ $t("conwaysGamePlaceHolder.startGame") }}</a>
-      <a class='toolbar-button actionButton' @click.prevent='pauseGame'>{{ $t("conwaysGamePlaceHolder.pauseGame") }}</a>
-      <a class='toolbar-button actionButton' @click.prevent='killGame'>{{ $t("conwaysGamePlaceHolder.killGame") }}</a>
+      <!-- <a class='toolbar-button actionButton' @click.prevent='pauseGame'>{{ $t("conwaysGamePlaceHolder.pauseGame") }}</a>
+      <a class='toolbar-button actionButton' @click.prevent='killGame'>{{ $t("conwaysGamePlaceHolder.killGame") }}</a> -->
     </div>
     <cells-template-bar />
     <div class = 'canvasContainer' @scroll='syncCanvasData'>
@@ -46,8 +80,17 @@ export default {
     getGameId () {
       return this.$route.params.gameId
     },
+    getGameData () {
+      return this.cgStorage.readGameData(this.getGameOwnerId(), this.getGameId())
+    },
+    getUserLocalData () {
+      return this.cgStorage.readLocalUserData()
+    },
     getUserLocalColor () {
-      return this.cgStorage.readLocalUserData().color
+      return this.getGameData().users[this.getUserLocalData().id].color
+    },
+    getHexUserLocalColor () {
+      return '#' + this.getUserLocalColor()
     },
     getResolution () {
       let resolution = this.cgStorage.readGameData(this.getGameOwnerId(), this.getGameId()).resolution
@@ -87,10 +130,10 @@ export default {
         }
       })
     },
-    pauseGame () {
+    /* pauseGame () {
     },
     killGame () {
-    },
+    }, */
     createCell (position, canvasData) {
       console.log(`Creating cell for ${JSON.stringify(position)} in ${JSON.stringify(canvasData)}`)
 
@@ -179,11 +222,13 @@ export default {
   },
   data () {
     return {
-      canvasDataObject: {}
+      canvasDataObject: {},
+      userColor: '#000000'
     }
   },
   mounted () {
     this.initializeCanvas('boardCanvas')
+    this.$data.userColor = this.getHexUserLocalColor()
   }
 }
 </script>
@@ -201,10 +246,58 @@ export default {
   padding: 0px;
   background-color: #3fb67b;
   height: 400px;
+  width: 100%;
 }
 
 #boardCanvas {
   /* border: 1px solid black; */
   background-color: white;
+}
+
+.gamePlaceholderDataDescriptorContainer {
+  background-color: #3fb67b;
+  color: #f6f6f6;
+  border: 0;
+  padding: 0.8em;
+  position: relative;
+  width: 100%;
+  height: 100px;
+}
+
+.gamePlaceholderDataDescriptorContainer p {
+  margin-top: 0px;
+  margin-bottom: 0.2em;
+  width: 100%;
+  height: 18px;
+  position: relative;
+}
+.userDataDescriptorContainer {
+  float: left;
+  position: relative;
+  width: 50%;
+}
+
+.descriptorLabel {
+  font-size: small;
+  font-weight: bold;
+  float: left;
+  margin-right: 10px;
+}
+
+.colorContainer {
+  border: solid 1px white;
+  height: 15px;
+  width: 15px;
+}
+
+.descriptorValue {
+  font-size: smaller;
+  float: left;
+}
+
+.gameDataDescriptorContainer {
+  float: right;
+  position: relative;
+  width: 50%;
 }
 </style>

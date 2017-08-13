@@ -22,7 +22,7 @@
           <td>{{gameDescriptor.name}}</td>
           <td>{{gameDescriptor.createdOn}}</td>
           <td>{{gameDescriptor.ownerId}}</td>
-          <td>{{gameDescriptor.users.length}}</td>
+          <td>{{Object.keys(gameDescriptor.users).length}}</td>
           <td>
             <a class='game-selection-item-button actionButton' @click.prevent='gameDescriptorSelected = gameDescriptor'>{{ $t("label.join") }}</a>
           </td>
@@ -66,8 +66,11 @@ export default {
 
       console.log('data sent to server: ' + JSON.stringify(newGameData))
     },
-    saveDataIntoLocalStorage: function (gameData) {
-      this.cgStorage.saveGameData(gameData)
+    saveOwnGameIntoDataLocalStorage: function (gameData) {
+      this.cgStorage.saveOwnGameData(gameData)
+    },
+    saveAlienGameDataIntoLocalStorage: function (gameData) {
+      this.cgStorage.saveAlienGameData(gameData)
     },
     joinGame: function (joinGameSubComponentData) {
       let data = {
@@ -91,17 +94,16 @@ export default {
         console.log(`Game creation confirmed with data: ${JSON.stringify(gameData)}`)
 
         console.log('Saving data into storage...')
-        this.saveDataIntoLocalStorage(gameData)
+        this.saveOwnGameIntoDataLocalStorage(gameData)
 
         console.log('Redirecting to game page')
         this.$router.push(`/user/${gameData.ownerId}/game/${gameData.id}`)
       },
-      joinedToGame (data) {
-        console.log(`Successful joined game ${JSON.stringify(data)}`)
-        let gameData = data.game
+      joinedToGame (gameData) {
+        console.log(`Successful joined game ${JSON.stringify(gameData)}`)
 
         console.log('Saving data into storage...')
-        this.saveDataIntoLocalStorage(gameData)
+        this.saveAlienGameDataIntoLocalStorage(gameData)
 
         console.log('Redirecting to game page')
         this.$router.push(`/user/${gameData.ownerId}/game/${gameData.id}`)

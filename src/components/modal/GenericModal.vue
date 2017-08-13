@@ -74,6 +74,9 @@ export default {
   color: #42b983;
 }
 
+.modal-header h2 {
+  margin-top: 0;
+}
 .modal-body {
   margin: 20px 0;
 }

@@ -12,7 +12,7 @@
 
     </div>
 
-    <div slot="footer" class="noselect">
+    <div slot="footer" class="noselect" style="width: 100%; position: relative; height: 16px;">
       <a class='modal-default-button actionButton' @click.prevent='cancel'>{{ $t("label.cancel") }}</a>
       <a class='modal-default-button actionButton' :class="{'inactive': $v.color.$invalid}" @click.prevent='propagateData'>{{ $t("joinGameModal.joinIt") }}</a>
     </div>
