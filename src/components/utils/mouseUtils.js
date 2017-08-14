@@ -11,11 +11,12 @@ function getMouse (e, elementData, element) {
   let my
 
   // Compute the total offset. It's possible to cache this if you want
-  if (element.offsetParent !== undefined) {
+  let intermediateElement = element
+  if (intermediateElement.offsetParent !== undefined) {
     do {
-      offsetX += element.offsetLeft
-      offsetY += element.offsetTop
-    } while ((element = element.offsetParent))
+      offsetX += intermediateElement.offsetLeft
+      offsetY += intermediateElement.offsetTop
+    } while ((intermediateElement = intermediateElement.offsetParent))
   }
 
   // Add padding and border style widths to offset
@@ -24,8 +25,8 @@ function getMouse (e, elementData, element) {
   offsetX += elementData.stylePaddingLeft + elementData.styleBorderLeft + elementData.htmlLeft
   offsetY += elementData.stylePaddingTop + elementData.styleBorderTop + elementData.htmlTop
 
-  mx = e.pageX - offsetX
-  my = e.pageY - offsetY
+  mx = e.pageX - offsetX + element.parentElement.scrollLeft
+  my = e.pageY - offsetY + element.parentElement.scrollTop
 
   // We return a simple javascript object with x and y defined
   return {x: mx, y: my}
